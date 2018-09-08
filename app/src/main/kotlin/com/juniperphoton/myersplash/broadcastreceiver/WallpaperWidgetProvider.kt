@@ -65,7 +65,7 @@ class WallpaperWidgetProvider : AppWidgetProvider() {
     private fun updateWidget(context: Context, widgetId: Int, filePath: String) {
         val manager = AppWidgetManager.getInstance(context)
         val remoteViews = RemoteViews(context.packageName, R.layout.widget_layout)
-        remoteViews.setTextViewText(R.id.widget_update_time_text, "$UnsplashImageFactory.DATE_STRING_FOR_DISPLAY Updated")
+        remoteViews.setTextViewText(R.id.widget_update_time_text, UnsplashImageFactory.TODAY_STRING_FOR_DISPLAY)
         val bm = BitmapFactory.decodeFile(filePath)
         remoteViews.setImageViewBitmap(R.id.widget_center_image, bm)
 

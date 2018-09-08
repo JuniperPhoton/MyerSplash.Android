@@ -49,7 +49,6 @@
     <string name="search_by_other_keywords">SEARCH BY OTHER KEYWORDS</string>
     <string name="return_to_content">RETURN TO %s</string>
     <string name="set_as_wallpaper">EDIT AND SET AS</string>
-    <string name="end">END</string>
     <string name="search_action">android.myersplash.action.search</string>
     <string name="random_action">android.myersplash.action.search</string>
     <string name="buy_me_a_drink">Treat me a drink via Alipay</string>
@@ -107,6 +106,7 @@
     <string name="recommended_by">recommended by</string>
     <string name="author_default_name">JuniperPhoton</string>
     <string name="loading">Loading…</string>
+    <string name="end">The End</string>
     <string name="recommended_tag">TODAY</string>
     <string name="copied_tag">COPIED</string>
 </resources>

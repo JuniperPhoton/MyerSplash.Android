@@ -25,7 +25,8 @@ class UnsplashImage : Serializable {
     private val createdAt: String? = null
 
     @SerializedName("color")
-    private val color: String? = null
+    var color: String? = null
+        internal set
 
     @SerializedName("likes")
     private val likes: Int = 0
@@ -94,7 +95,7 @@ class UnsplashImage : Serializable {
     fun checkDownloaded(): Observable<Boolean> {
         return Observable.create { s ->
             try {
-                val path = pathForDownload + ".jpg"
+                val path = "$pathForDownload.jpg"
                 val file = File(path)
                 val existed = file.exists()
                 s.onNext(existed)

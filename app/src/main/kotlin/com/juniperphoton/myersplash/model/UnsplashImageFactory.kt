@@ -18,9 +18,6 @@ object UnsplashImageFactory {
             return createDateString(todayDate)
         }
 
-    private val todayDate: Date
-        get() = Calendar.getInstance(TimeZone.getDefault()).time
-
     fun createDateString(date: Date): String {
         return SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(date)
     }
@@ -33,15 +30,21 @@ object UnsplashImageFactory {
         return "${Request.AUTO_CHANGE_WALLPAPER_THUMB}${createDateString(date)}.jpg"
     }
 
-    private val DATE_STRING_FOR_DISPLAY: String
+    val TODAY_STRING_FOR_DISPLAY: String
         get() {
             return SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(todayDate)
         }
+
+    private val dateFormat = SimpleDateFormat("dd", Locale.getDefault())
+
+    private val todayDate: Date
+        get() = Calendar.getInstance(TimeZone.getDefault()).time
 
     fun createHighlightImage(date: Date): UnsplashImage {
         return UnsplashImage().apply {
             isUnsplash = false
             showTodayTag = date == todayDate
+            color = if (dateFormat.format(date).toInt() % 2 == 0) "#50ffffff" else "#000000"
             id = createDateString(date)
             urls = ImageUrl().apply {
                 val fullUrl = createFullDownloadUrl(date)

@@ -7,16 +7,6 @@
         <intent
             android:action="action.search"
             android:targetClass="com.juniperphoton.myersplash.activity.MainActivity"
-            android:targetPackage="com.juniperphoton.myersplash" />
-    </shortcut>
-    <shortcut
-        android:icon="@drawable/ic_random_shortcut"
-        android:shortcutId="random"
-        android:shortcutLongLabel="@string/random"
-        android:shortcutShortLabel="@string/random">
-        <intent
-            android:action="action.random"
-            android:targetClass="com.juniperphoton.myersplash.activity.MainActivity"
-            android:targetPackage="com.juniperphoton.myersplash" />
+            android:targetPackage="com.juniperphoton.myersplash"/>
     </shortcut>
 </shortcuts>

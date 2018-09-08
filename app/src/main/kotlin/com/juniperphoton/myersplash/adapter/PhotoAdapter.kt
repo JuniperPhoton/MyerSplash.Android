@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import com.juniperphoton.myersplash.R
 import com.juniperphoton.myersplash.model.UnsplashImage
+import com.juniperphoton.myersplash.widget.item.PhotoFooterView
 import com.juniperphoton.myersplash.widget.item.PhotoItemView
 
 class PhotoAdapter(private val imageData: MutableList<UnsplashImage>,
@@ -19,18 +20,15 @@ class PhotoAdapter(private val imageData: MutableList<UnsplashImage>,
     companion object {
         const val ITEM_TYPE_ITEM = 0
         const val ITEM_TYPE_FOOTER = 1
-
-        private const val FOOTER_FLAG_NOT_SHOW = 0
-        private const val FOOTER_FLAG_SHOW = 1
-        private const val FOOTER_FLAG_SHOW_END = 1 shl 1 or FOOTER_FLAG_SHOW
     }
 
     private var isAutoLoadMore = true
-    private var footerFlag = FOOTER_FLAG_SHOW
 
     private var recyclerView: RecyclerView? = null
     private var layoutManager: RecyclerView.LayoutManager? = null
     private var lastPosition = -1
+
+    private var footerView: PhotoFooterView? = null
 
     /**
      * Invoked when photo is clicked
@@ -56,15 +54,15 @@ class PhotoAdapter(private val imageData: MutableList<UnsplashImage>,
         when {
             size >= 10 -> {
                 isAutoLoadMore = true
-                footerFlag = FOOTER_FLAG_SHOW
+                footerView?.toggleLoading()
             }
             size > 0 -> {
                 isAutoLoadMore = false
-                footerFlag = FOOTER_FLAG_SHOW_END
+                footerView?.indicateEnd()
             }
             else -> {
                 isAutoLoadMore = false
-                footerFlag = FOOTER_FLAG_NOT_SHOW
+                footerView?.toggleCollasped()
             }
         }
     }
@@ -73,14 +71,12 @@ class PhotoAdapter(private val imageData: MutableList<UnsplashImage>,
         return when (viewType) {
             ITEM_TYPE_ITEM -> {
                 val view = LayoutInflater.from(context).inflate(R.layout.row_photo, parent, false)
-                PhotoViewHolder(view, viewType, footerFlag)
+                PhotoViewHolder(view)
             }
             ITEM_TYPE_FOOTER -> {
-                val view: View = when (footerFlag) {
-                    FOOTER_FLAG_SHOW_END -> LayoutInflater.from(context).inflate(R.layout.row_footer_end, parent, false)
-                    else -> LayoutInflater.from(context).inflate(R.layout.row_footer, parent, false)
-                }
-                PhotoViewHolder(view, viewType, footerFlag)
+                footerView = LayoutInflater.from(context)
+                        .inflate(R.layout.row_footer, parent, false) as PhotoFooterView
+                PhotoViewHolder(footerView!!)
             }
             else -> throw IllegalArgumentException("unknown view type")
         }
@@ -155,7 +151,7 @@ class PhotoAdapter(private val imageData: MutableList<UnsplashImage>,
     }
 
     fun clear() {
-        footerFlag = FOOTER_FLAG_NOT_SHOW
+        footerView?.toggleCollasped()
         imageData.clear()
         notifyDataSetChanged()
     }
@@ -166,29 +162,23 @@ class PhotoAdapter(private val imageData: MutableList<UnsplashImage>,
         when {
             data.size >= 10 -> {
                 isAutoLoadMore = true
-                footerFlag = footerFlag or FOOTER_FLAG_SHOW
+                footerView?.toggleLoading()
                 notifyItemInserted(size)
             }
             data.size > 0 -> {
                 isAutoLoadMore = false
-                footerFlag = footerFlag or FOOTER_FLAG_SHOW
-                footerFlag = footerFlag or FOOTER_FLAG_SHOW_END
+                footerView?.indicateEnd()
                 notifyItemInserted(size)
             }
             else -> {
                 isAutoLoadMore = false
-                footerFlag = FOOTER_FLAG_NOT_SHOW
+                footerView?.indicateEnd()
+                notifyDataSetChanged()
             }
         }
     }
 
-    class PhotoViewHolder(itemView: View, type: Int, footerFlag: Int) : RecyclerView.ViewHolder(itemView) {
-        init {
-            if (type != PhotoAdapter.ITEM_TYPE_ITEM && footerFlag == FOOTER_FLAG_NOT_SHOW) {
-                itemView.visibility = View.INVISIBLE
-            }
-        }
-    }
+    class PhotoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 }
 
 

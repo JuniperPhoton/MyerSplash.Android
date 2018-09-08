@@ -113,9 +113,6 @@ class MainListFragment : BasePresenterFragment<MainContract.MainPresenter>(), Ma
         } else {
             updateNoItemVisibility(false)
         }
-        if (next == 1) {
-            ToastService.sendShortToast("Loaded :D")
-        }
     }
 
     override fun updateNoItemVisibility() {
@@ -212,7 +209,7 @@ class MainListFragment : BasePresenterFragment<MainContract.MainPresenter>(), Ma
 
     private fun displayListDataInternal(unsplashImages: MutableList<UnsplashImage>) {
         if (adapter != null && adapter!!.firstImage != null) {
-            if (adapter?.firstImage?.id == unsplashImages[0].id) {
+            if (adapter?.firstImage?.id == unsplashImages[0]?.id) {
                 return
             }
         }

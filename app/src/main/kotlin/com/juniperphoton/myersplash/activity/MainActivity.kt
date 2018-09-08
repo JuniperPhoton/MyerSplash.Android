@@ -26,13 +26,10 @@ import com.juniperphoton.myersplash.model.UnsplashCategory
 import com.juniperphoton.myersplash.utils.AnimatorListeners
 import com.juniperphoton.myersplash.utils.FileUtil
 import com.juniperphoton.myersplash.utils.PermissionUtil
-import com.juniperphoton.myersplash.utils.SimpleObserver
 import com.juniperphoton.myersplash.widget.ImageDetailView
 import com.juniperphoton.myersplash.widget.PivotTitleBar
 import com.juniperphoton.myersplash.widget.SearchView
 import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import org.greenrobot.eventbus.EventBus
 
@@ -285,10 +282,6 @@ class MainActivity : BaseActivity() {
                 "action.download" -> {
                     val intent = Intent(this, ManageDownloadActivity::class.java)
                     startActivity(intent)
-                }
-                "action.random" -> {
-                    handleShortcut = true
-                    initNavigationIndex = 2
                 }
             }
         }

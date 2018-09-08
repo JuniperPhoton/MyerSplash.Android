@@ -1,6 +1,7 @@
 package com.juniperphoton.myersplash.cloudservice
 
 import android.annotation.SuppressLint
+import android.util.Log
 import com.juniperphoton.myersplash.model.UnsplashImage
 import com.juniperphoton.myersplash.model.UnsplashImageFactory
 import io.reactivex.Observable
@@ -15,6 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLContext
@@ -25,11 +27,11 @@ import javax.net.ssl.X509TrustManager
 object CloudService {
     private const val DEFAULT_TIMEOUT = 10
     private const val DEFAULT_REQUEST_COUNT = 10
-    private const val DEFAULT_HIGHLIGHTS_COUNT = 30
+    private const val DEFAULT_HIGHLIGHTS_COUNT = 60
 
-    private val endDate = Calendar.getInstance(TimeZone.getDefault()).apply {
-        set(2017, 3, 20)
-    }.time
+    private const val TAG = "CloudService"
+
+    private val endDate = SimpleDateFormat("yyyy/MM/dd").parse("2018/07/20")
 
     private val retrofit: Retrofit
     private val photoService: PhotoService
@@ -109,12 +111,14 @@ object CloudService {
                 val date = calendar.time
                 if (date > endDate) {
                     list.add(UnsplashImageFactory.createHighlightImage(calendar.time))
+                } else {
+                    Log.w(TAG, "the date: $date is before end date $endDate")
                 }
             }
 
             it.onNext(list)
             it.onComplete()
-        }.compose(networkTransformer())
+        }.delay(200, TimeUnit.MILLISECONDS).compose(networkTransformer())
     }
 
     fun searchPhotos(url: String,
