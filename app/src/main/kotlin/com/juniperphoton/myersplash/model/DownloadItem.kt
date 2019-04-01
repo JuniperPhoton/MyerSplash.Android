@@ -53,7 +53,7 @@ open class DownloadItem() : RealmObject() {
         this.thumbUrl = thumbUrl
         this.downloadUrl = downloadUrl
         this.status = DOWNLOAD_STATUS_DOWNLOADING
-        this.fileName = fileName
+        this.fileName = fileName.replace(" ", "")
     }
 
     open fun syncStatus() {

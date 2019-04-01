@@ -2,15 +2,12 @@ package com.juniperphoton.myersplash.utils
 
 import android.app.WallpaperManager
 import android.content.Intent
-import androidx.core.content.FileProvider
+import android.net.Uri
 import com.juniperphoton.myersplash.App
-import com.juniperphoton.myersplash.R
-import java.io.File
 
 object IntentUtil {
-    fun getSetAsWallpaperIntent(file: File): Intent {
-        val uri = FileProvider.getUriForFile(App.instance,
-                App.instance.getString(R.string.authorities), file)
+    fun getSetAsWallpaperIntent(uri: Uri): Intent {
+        Pasteur.info("IntentUtil", "getSetAsWallpaperIntent: $uri")
         val intent = WallpaperManager.getInstance(App.instance).getCropAndSetWallpaperIntent(uri)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         return intent

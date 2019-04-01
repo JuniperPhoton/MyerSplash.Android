@@ -2,17 +2,20 @@ package com.juniperphoton.myersplash.activity
 
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.app.WallpaperManager
 import android.content.Intent
 import android.graphics.*
 import android.graphics.drawable.Animatable
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.annotation.WorkerThread
+import androidx.core.content.FileProvider
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
@@ -164,8 +167,17 @@ class EditActivity : BaseActivity() {
 
     private fun setAs(file: File) {
         Pasteur.d(TAG, "set as, file path:${file.absolutePath}")
-        val intent = IntentUtil.getSetAsWallpaperIntent(file)
-        App.instance.startActivity(intent)
+
+        val uri = FileProvider.getUriForFile(App.instance,
+                App.instance.getString(R.string.authorities), file)
+
+        try {
+            val intent = IntentUtil.getSetAsWallpaperIntent(uri)
+            startActivity(intent)
+        } catch (e: IllegalArgumentException) {
+            val bm = MediaStore.Images.Media.getBitmap(contentResolver, uri);
+            WallpaperManager.getInstance(this).setBitmap(bm)
+        }
     }
 
     private fun composeMask() {

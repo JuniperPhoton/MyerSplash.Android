@@ -3,7 +3,7 @@
     <cache-path
         name="sharedImages"
         path="" />
-    <external-path
+    <external-files-path
         name="downloaded"
         path="Pictures/MyerSplash/" />
 </Paths>

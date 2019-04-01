@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Binder
 import android.os.IBinder
-import android.util.Log
 import com.juniperphoton.myersplash.App
 import com.juniperphoton.myersplash.R
 import com.juniperphoton.myersplash.RealmCache
@@ -63,7 +62,7 @@ class DownloadService : Service() {
         }
 
         if (canceled) {
-            Log.d(TAG, "on handle intent cancelled")
+            Pasteur.d(TAG, "on handle intent cancelled")
             val subscriber = downloadUrlToDisposableMap[downloadUrl]
             if (subscriber != null) {
                 subscriber.dispose()
@@ -71,7 +70,7 @@ class DownloadService : Service() {
                 ToastService.sendShortToast(getString(R.string.cancelled_download))
             }
         } else {
-            Log.d(TAG, "on handle intent progress")
+            Pasteur.d(TAG, "on handle intent progress")
             downloadImage(downloadUrl, fileName, previewUri, isUnsplash)
         }
     }
@@ -94,12 +93,12 @@ class DownloadService : Service() {
                         }
                     }
                 } else {
-                    Log.d(TAG, "output file:" + outputFile!!.absolutePath)
+                    Pasteur.d(TAG, "output file:" + outputFile!!.absolutePath)
 
-                    val newFile = File("${outputFile!!.path}.jpg")
+                    val newFile = File("${outputFile!!.path.replace(" ", "")}.jpg")
                     outputFile!!.renameTo(newFile)
 
-                    Log.d(TAG, "renamed file:" + newFile.absolutePath)
+                    Pasteur.d(TAG, "renamed file:" + newFile.absolutePath)
                     newFile.notifyFileUpdated(App.instance)
 
                     val realm = RealmCache.getInstance()
@@ -114,12 +113,12 @@ class DownloadService : Service() {
                     }
                     scheduleToReportFinished(url, previewUri, isUnsplash, newFile)
                 }
-                Log.d(TAG, getString(R.string.completed))
+                Pasteur.d(TAG, getString(R.string.completed))
             }
 
             override fun onError(e: Throwable) {
                 e.printStackTrace()
-                Log.d(TAG, "on handle intent error " + e.message + ",url:" + url)
+                Pasteur.d(TAG, "on handle intent error " + e.message + ",url:" + url)
                 NotificationUtil.showErrorNotification(Uri.parse(url), fileName, url, null)
 
                 val realm = RealmCache.getInstance()
@@ -135,7 +134,7 @@ class DownloadService : Service() {
             }
 
             override fun onNext(responseBody: ResponseBody) {
-                Log.d(TAG, "outputFile download onNext,size" + responseBody.contentLength())
+                Pasteur.d(TAG, "outputFile download onNext,size" + responseBody.contentLength())
                 this.outputFile = DownloadUtil.writeToFile(responseBody, file!!.path) {
                     RealmCache.getInstance().executeTransaction { realm ->
                         val downloadItem = realm.where(DownloadItem::class.java)
