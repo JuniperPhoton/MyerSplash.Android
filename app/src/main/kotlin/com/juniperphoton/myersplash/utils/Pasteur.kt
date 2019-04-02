@@ -18,7 +18,7 @@ object Pasteur {
 
     fun debug(tag: String?, string: String) {
         if (debugMode) {
-            Pasteur.d(tag ?: DEFAULT_TAG, string)
+            Log.d(tag ?: DEFAULT_TAG, string)
         }
     }
 
@@ -28,7 +28,7 @@ object Pasteur {
 
     fun info(tag: String?, string: String) {
         if (debugMode) {
-            Pasteur.i(tag ?: DEFAULT_TAG, string)
+            Log.i(tag ?: DEFAULT_TAG, string)
         }
     }
 
@@ -48,7 +48,7 @@ object Pasteur {
 
     fun error(tag: String?, string: String) {
         if (debugMode) {
-            Pasteur.e(tag ?: DEFAULT_TAG, string)
+            Log.e(tag ?: DEFAULT_TAG, string)
         }
     }
 }
