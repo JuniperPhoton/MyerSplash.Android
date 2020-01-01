@@ -9,11 +9,13 @@ import com.juniperphoton.myersplash.model.DownloadItem
 @Database(entities = [DownloadItem::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     companion object {
+        private const val DB_NAME = "myersplash_db"
+
         val instance: AppDatabase by lazy {
             Room.databaseBuilder(
                     App.instance,
                     AppDatabase::class.java,
-                    "myersplash_db"
+                    DB_NAME
             ).fallbackToDestructiveMigration().build()
         }
     }

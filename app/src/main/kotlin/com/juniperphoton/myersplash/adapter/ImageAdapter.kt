@@ -5,28 +5,34 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.DecelerateInterpolator
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.juniperphoton.myersplash.R
 import com.juniperphoton.myersplash.extension.addDimensions
 import com.juniperphoton.myersplash.extension.getNavigationBarSize
 import com.juniperphoton.myersplash.model.UnsplashImage
+import com.juniperphoton.myersplash.utils.Pasteur
 import com.juniperphoton.myersplash.widget.item.OnClickPhotoListener
 import com.juniperphoton.myersplash.widget.item.OnClickQuickDownloadListener
 import com.juniperphoton.myersplash.widget.item.PhotoFooterView
 import com.juniperphoton.myersplash.widget.item.PhotoItemView
+import kotlin.math.ceil
 
-class PhotoAdapter(private val imageData: MutableList<UnsplashImage>,
-                   private val context: Context
-) : RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>() {
+class ImageAdapter(
+        private val context: Context
+) : RecyclerView.Adapter<ImageAdapter.PhotoViewHolder>() {
     companion object {
+        private const val TAG = "PhotoAdapter"
+
         const val ITEM_TYPE_ITEM = 0
         const val ITEM_TYPE_FOOTER = 1
 
-        private const val BASE_DELAY_MILLIS = 300L
-        private const val ANIMATION_DURATION_MILLIS = 800L
-        private const val ITEM_SLIDE_IN_TRANSLATION_X = 300
+        private const val ID_FOOTER = 100L
+
+        private const val BASE_DELAY_MILLIS = 100L
+        private const val ANIMATION_DURATION_MILLIS = 400L
+        private const val ITEM_SLIDE_IN_TRANSLATION_X = 100
 
         private const val LOAD_MORE_ITEMS_THRESHOLD = 10
     }
@@ -39,6 +45,8 @@ class PhotoAdapter(private val imageData: MutableList<UnsplashImage>,
 
     private var footerView: PhotoFooterView? = null
 
+    private val data = mutableListOf<UnsplashImage>()
+
     /**
      * Invoked when photo is clicked
      */
@@ -50,30 +58,15 @@ class PhotoAdapter(private val imageData: MutableList<UnsplashImage>,
      */
     var onClickQuickDownload: OnClickQuickDownloadListener? = null
 
-    val firstImage: UnsplashImage?
+    private val maxPhotoCountOnScreen: Int
         get() {
-            return if (imageData.size > 0) {
-                imageData[0]
-            } else null
+            val height = recyclerView!!.height
+            val imgHeight = recyclerView!!.resources.getDimensionPixelSize(R.dimen.img_height)
+            return ceil(height.toDouble() / imgHeight.toDouble()).toInt()
         }
 
     init {
-        lastPosition = -1
-        val size = imageData.size
-        when {
-            size >= 10 -> {
-                isAutoLoadMore = true
-                footerView?.toggleLoading()
-            }
-            size > 0 -> {
-                isAutoLoadMore = false
-                footerView?.indicateEnd()
-            }
-            else -> {
-                isAutoLoadMore = false
-                footerView?.toggleCollapsed()
-            }
-        }
+        setHasStableIds(true)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
@@ -88,11 +81,17 @@ class PhotoAdapter(private val imageData: MutableList<UnsplashImage>,
                     val padding = context.getNavigationBarSize().y
                     addDimensions(null, padding)
                     setPadding(0, 0, 0, padding)
+                    toggleCollapsed()
                 }
                 PhotoViewHolder(footerView!!)
             }
             else -> throw IllegalArgumentException("unknown view type")
         }
+    }
+
+    override fun getItemId(position: Int): Long {
+        if (isFooterView(position)) return ID_FOOTER
+        return data.getOrNull(position)?.id?.hashCode()?.toLong() ?: RecyclerView.NO_ID
     }
 
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
@@ -102,7 +101,7 @@ class PhotoAdapter(private val imageData: MutableList<UnsplashImage>,
             }
             holder.itemView.onClickPhoto = onClickPhoto
             holder.itemView.onClickQuickDownload = onClickQuickDownload
-            holder.itemView.bind(imageData[holder.adapterPosition], position)
+            holder.itemView.bind(data[holder.adapterPosition], position)
         }
     }
 
@@ -128,27 +127,24 @@ class PhotoAdapter(private val imageData: MutableList<UnsplashImage>,
         container.translationX = ITEM_SLIDE_IN_TRANSLATION_X.toFloat()
 
         val animator = ValueAnimator.ofFloat(0.0f, 1.0f)
-        animator.addUpdateListener { valueAnimator -> container.alpha = valueAnimator.animatedValue as Float }
+        animator.addUpdateListener { valueAnimator ->
+            container.alpha = valueAnimator.animatedValue as Float
+        }
         animator.startDelay = delay
         animator.duration = duration
         animator.start()
 
         val animator2 = ValueAnimator.ofInt(ITEM_SLIDE_IN_TRANSLATION_X, 0)
-        animator2.addUpdateListener { valueAnimator -> container.translationX = (valueAnimator.animatedValue as Int).toFloat() }
-        animator2.interpolator = DecelerateInterpolator()
+        animator2.addUpdateListener { valueAnimator ->
+            container.translationX = (valueAnimator.animatedValue as Int).toFloat()
+        }
+        animator2.interpolator = AccelerateDecelerateInterpolator()
         animator2.startDelay = delay
         animator2.duration = duration
         animator2.start()
     }
 
-    private val maxPhotoCountOnScreen: Int
-        get() {
-            val height = recyclerView!!.height
-            val imgHeight = recyclerView!!.resources.getDimensionPixelSize(R.dimen.img_height)
-            return Math.ceil(height.toDouble() / imgHeight.toDouble()).toInt()
-        }
-
-    override fun getItemCount(): Int = imageData.size + 1
+    override fun getItemCount(): Int = data.size + 1
 
     override fun getItemViewType(position: Int): Int {
         return if (isFooterView(position)) ITEM_TYPE_FOOTER else ITEM_TYPE_ITEM
@@ -163,15 +159,38 @@ class PhotoAdapter(private val imageData: MutableList<UnsplashImage>,
         layoutManager = recyclerView.layoutManager
     }
 
-    fun clear() {
+    fun indicateLoadMoreError() {
         footerView?.toggleCollapsed()
-        imageData.clear()
-        notifyDataSetChanged()
     }
 
-    fun setLoadMoreData(data: MutableList<UnsplashImage>) {
-        val size = this.imageData.size
-        this.imageData.addAll(data)
+    fun refresh(list: List<UnsplashImage>) {
+        Pasteur.i(TAG) {
+            "refresh with new list: ${list.size}"
+        }
+
+        data.clear()
+        setLoadMoreData(list)
+
+        val size = data.size
+        when {
+            size >= 10 -> {
+                isAutoLoadMore = true
+                footerView?.toggleLoading()
+            }
+            size > 0 -> {
+                isAutoLoadMore = false
+                footerView?.indicateEnd()
+            }
+            else -> {
+                isAutoLoadMore = false
+                footerView?.toggleCollapsed()
+            }
+        }
+    }
+
+    private fun setLoadMoreData(list: List<UnsplashImage>) {
+        val size = list.size
+        data.addAll(list)
         when {
             data.size >= LOAD_MORE_ITEMS_THRESHOLD -> {
                 isAutoLoadMore = true

@@ -4,10 +4,6 @@ import android.content.Context
 import androidx.appcompat.app.AlertDialog
 import com.juniperphoton.myersplash.R
 
-/**
- * @author JuniperPhoton @ Zhihu Inc.
- * @since 2019-04-28
- */
 fun buildMeteredWarningDialog(context: Context, positiveClick: () -> Unit): AlertDialog.Builder {
     return AlertDialog.Builder(context).apply {
         setTitle(R.string.attention)

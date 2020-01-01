@@ -8,13 +8,11 @@ import com.facebook.imagepipeline.core.ImagePipelineFactory
 import com.juniperphoton.myersplash.App
 import com.juniperphoton.myersplash.R
 import com.juniperphoton.myersplash.db.AppDatabase
-import com.juniperphoton.myersplash.event.RefreshUIEvent
 import com.juniperphoton.myersplash.utils.LocalSettingHelper
 import com.juniperphoton.myersplash.utils.ThemeHelper.switchTheme
 import com.juniperphoton.myersplash.utils.Toaster
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.coroutines.*
-import org.greenrobot.eventbus.EventBus
 
 @Suppress("unused", "unused_parameter")
 class SettingsActivity : BaseActivity(), View.OnClickListener, CoroutineScope by MainScope() {
@@ -33,10 +31,6 @@ class SettingsActivity : BaseActivity(), View.OnClickListener, CoroutineScope by
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-
-        quickDownloadSettings.onCheckedChanged = {
-            EventBus.getDefault().post(RefreshUIEvent())
-        }
 
         themeStrings = arrayOf(
                 getString(R.string.settings_theme_dark),
@@ -107,7 +101,6 @@ class SettingsActivity : BaseActivity(), View.OnClickListener, CoroutineScope by
         Fresco.getImagePipeline().clearCaches()
         Toaster.sendShortToast(R.string.all_clear)
         clearCacheSettings.content = "0 MB"
-        EventBus.getDefault().post(RefreshUIEvent())
     }
 
     private suspend fun clearDatabase() = withContext(Dispatchers.IO) {

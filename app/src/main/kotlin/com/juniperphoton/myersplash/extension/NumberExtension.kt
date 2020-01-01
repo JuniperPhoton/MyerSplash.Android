@@ -1,3 +1,5 @@
 package com.juniperphoton.myersplash.extension
 
-fun Number.pow(): Double = Math.pow(this.toDouble(), 2.0)
+import kotlin.math.pow
+
+fun Number.pow(): Double = this.toDouble().pow(2.0)

@@ -16,6 +16,12 @@ object Pasteur {
         debug(tag, string)
     }
 
+    fun d(tag: String, block: () -> String) {
+        if (debugMode) {
+            Log.d(tag, block())
+        }
+    }
+
     fun debug(tag: String?, string: String) {
         if (debugMode) {
             Log.d(tag ?: DEFAULT_TAG, string)
@@ -24,6 +30,12 @@ object Pasteur {
 
     fun i(tag: String?, string: String) {
         info(tag, string)
+    }
+
+    fun i(tag: String, block: () -> String) {
+        if (debugMode) {
+            Log.i(tag, block())
+        }
     }
 
     fun info(tag: String?, string: String) {
@@ -36,6 +48,12 @@ object Pasteur {
         warn(tag, string)
     }
 
+    fun w(tag: String, block: () -> String) {
+        if (debugMode) {
+            Log.w(tag, block())
+        }
+    }
+
     fun warn(tag: String?, string: String) {
         if (debugMode) {
             Log.w(tag ?: DEFAULT_TAG, string)
@@ -44,6 +62,12 @@ object Pasteur {
 
     fun e(tag: String?, string: String) {
         error(tag, string)
+    }
+
+    fun e(tag: String, block: () -> String) {
+        if (debugMode) {
+            Log.e(tag, block())
+        }
     }
 
     fun error(tag: String?, string: String) {

@@ -21,11 +21,12 @@ import android.view.animation.LinearInterpolator
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.annotation.UiThread
+import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
+import androidx.core.content.FileProvider
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
@@ -35,11 +36,10 @@ import com.juniperphoton.flipperlayout.FlipperLayout
 import com.juniperphoton.myersplash.R
 import com.juniperphoton.myersplash.activity.EditActivity
 import com.juniperphoton.myersplash.extension.*
-import com.juniperphoton.myersplash.fragment.Action
 import com.juniperphoton.myersplash.model.DownloadItem
 import com.juniperphoton.myersplash.model.UnsplashImage
 import com.juniperphoton.myersplash.utils.*
-import com.juniperphoton.myersplash.view.ImageDetailViewContract
+import com.juniperphoton.myersplash.viewmodel.AppViewModelProviders
 import com.juniperphoton.myersplash.viewmodel.ImageDetailViewModel
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -48,9 +48,11 @@ import kotlinx.coroutines.*
 import java.io.File
 import java.util.concurrent.TimeUnit
 
+typealias Action = () -> Unit
+
 @Suppress("unused")
 class ImageDetailView(context: Context, attrs: AttributeSet
-) : FrameLayout(context, attrs), ImageDetailViewContract {
+) : FrameLayout(context, attrs) {
     companion object {
         private const val TAG = "ImageDetailView"
         private const val RESULT_CODE = 10000
@@ -169,8 +171,24 @@ class ImageDetailView(context: Context, attrs: AttributeSet
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initDetailViews() {
-        viewModel = ViewModelProviders.of(context as FragmentActivity).get(ImageDetailViewModel::class.java)
-        viewModel.viewContract = this
+        val activity = context as AppCompatActivity
+
+        viewModel = AppViewModelProviders.of(activity)
+                .get(ImageDetailViewModel::class.java)
+                .apply {
+                    navigateToAuthorPage.observe(activity, Observer { url ->
+                        url ?: return@Observer
+                        navigateToAuthorPage(url)
+                    })
+                    share.observe(activity, Observer { image ->
+                        image ?: return@Observer
+                        doShare(image)
+                    })
+                    launchEdit.observe(activity, Observer { uri ->
+                        uri ?: return@Observer
+                        launchEditActivity(uri)
+                    })
+                }
 
         detailRootScrollView.setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_UP) {
@@ -492,6 +510,22 @@ class ImageDetailView(context: Context, attrs: AttributeSet
         viewModel.share()
     }
 
+    private fun doShare(image: UnsplashImage) {
+        val context = context ?: return
+
+        val file = FileUtils.getCachedFile(image.listUrl!!)
+
+        if (file == null || !file.exists()) {
+            Toaster.sendShortToast(context.getString(R.string.something_wrong))
+            return
+        }
+
+        val shareText = context.getString(R.string.share_text, image.userName, image.downloadUrl)
+        val contentUri = FileProvider.getUriForFile(context,
+                context.getString(R.string.authorities), file)
+        launchShare(contentUri, shareText)
+    }
+
     @OnClick(R.id.detail_download_fab)
     fun onClickDownload() {
         if (!PermissionUtils.check(context as Activity)) {
@@ -524,13 +558,13 @@ class ImageDetailView(context: Context, attrs: AttributeSet
         viewModel.setAs()
     }
 
-    override fun launchEditActivity(uri: Uri) {
+    private fun launchEditActivity(uri: Uri) {
         val intent = Intent(context, EditActivity::class.java)
         intent.putExtra(Intent.EXTRA_STREAM, uri)
         context.startActivity(intent)
     }
 
-    override fun navigateToAuthorPage(url: String) {
+    private fun navigateToAuthorPage(url: String) {
         val uri = Uri.parse(url)
 
         val intentBuilder = CustomTabsIntent.Builder()
@@ -546,7 +580,7 @@ class ImageDetailView(context: Context, attrs: AttributeSet
         customTabsIntent.launchUrl(context, uri)
     }
 
-    override fun launchShare(uri: Uri, text: String) {
+    private fun launchShare(uri: Uri, text: String) {
         val intent = Intent(Intent.ACTION_SEND)
 
         intent.apply {

@@ -3,30 +3,27 @@ package com.juniperphoton.myersplash.activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.juniperphoton.myersplash.R
 import com.juniperphoton.myersplash.adapter.DownloadsListAdapter
+import com.juniperphoton.myersplash.extension.setVisible
 import com.juniperphoton.myersplash.model.DownloadItem
+import com.juniperphoton.myersplash.restore.restorePosition
+import com.juniperphoton.myersplash.restore.savePosition
 import com.juniperphoton.myersplash.service.DownloadService
 import com.juniperphoton.myersplash.utils.AnalysisHelper
 import com.juniperphoton.myersplash.utils.NotificationUtils
 import com.juniperphoton.myersplash.utils.Params
 import com.juniperphoton.myersplash.utils.Pasteur
+import com.juniperphoton.myersplash.viewmodel.AppViewModelProviders
 import com.juniperphoton.myersplash.viewmodel.DownloadListViewModel
-import com.trello.rxlifecycle3.android.lifecycle.kotlin.bindUntilEvent
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_manage_download.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 @Suppress("unused")
 class DownloadsListActivity : BaseActivity(), DownloadsListAdapter.Callback, CoroutineScope by MainScope() {
@@ -40,6 +37,17 @@ class DownloadsListActivity : BaseActivity(), DownloadsListAdapter.Callback, Cor
     private lateinit var adapter: DownloadsListAdapter
     private lateinit var viewModel: DownloadListViewModel
 
+    private val spanCount: Int
+        get() {
+            val width = window.decorView.width
+            return if (width <= SCREEN_WIDTH_WITH_DEFAULT_SPAN) {
+                DEFAULT_SPAN
+            } else {
+                val min = resources.getDimensionPixelSize(R.dimen.download_item_min_width)
+                (width / min)
+            }
+        }
+
     private val deleteOptionsMap = mapOf(
             0 to DownloadItem.DOWNLOAD_STATUS_DOWNLOADING,
             1 to DownloadItem.DOWNLOAD_STATUS_OK,
@@ -50,15 +58,33 @@ class DownloadsListActivity : BaseActivity(), DownloadsListAdapter.Callback, Cor
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_manage_download)
 
-        viewModel = ViewModelProviders.of(this).get(DownloadListViewModel::class.java)
+        viewModel = AppViewModelProviders.of(this).get(DownloadListViewModel::class.java)
 
         AnalysisHelper.logEnterDownloads()
+
         moreFab.setOnClickListener(this)
 
-        Looper.myQueue().addIdleHandler {
-            initViews()
-            false
-        }
+        adapter = DownloadsListAdapter(this@DownloadsListActivity)
+        adapter.callback = this@DownloadsListActivity
+
+        val layoutManager = StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL)
+
+        recyclerView.layoutManager = layoutManager
+        recyclerView.adapter = adapter
+
+        // We don't change the item animator so we cast it directly
+        (recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        updateNoItemVisibility()
+
+        viewModel.downloadItems.observe(this, Observer { items ->
+            Pasteur.i(TAG) {
+                "refresh items: ${items.size}"
+            }
+            adapter.refresh(items)
+            updateNoItemVisibility()
+
+            recyclerView.restorePosition(savedInstanceState)
+        })
 
         handleIntent(intent)
     }
@@ -84,97 +110,57 @@ class DownloadsListActivity : BaseActivity(), DownloadsListAdapter.Callback, Cor
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        recyclerView.savePosition(outState)
+        super.onSaveInstanceState(outState)
+    }
+
     private fun onClickMore() {
         AnalysisHelper.logClickMoreButtonInDownloadList()
 
         AlertDialog.Builder(this).setTitle(R.string.clear_options_title)
                 .setItems(R.array.delete_options) { _, i ->
-                    runBlocking {
-                        viewModel.deleteByStatus(
-                                deleteOptionsMap[i] ?: DownloadItem.DOWNLOAD_STATUS_INVALID)
-                    }
+                    viewModel.deleteByStatus(deleteOptionsMap[i]
+                            ?: DownloadItem.DOWNLOAD_STATUS_INVALID)
                 }
                 .create()
                 .show()
     }
 
     private fun updateNoItemVisibility() {
-        noItemView.visibility = if (adapter.data.isEmpty()) View.VISIBLE else View.GONE
-    }
-
-    private val spanCount: Int
-        get() {
-            val width = window.decorView.width
-            return if (width <= SCREEN_WIDTH_WITH_DEFAULT_SPAN) {
-                DEFAULT_SPAN
-            } else {
-                val min = resources.getDimensionPixelSize(R.dimen.download_item_min_width)
-                (width / min)
-            }
-        }
-
-    private fun initViews() = runBlocking {
-        adapter = DownloadsListAdapter(this@DownloadsListActivity)
-        adapter.callback = this@DownloadsListActivity
-
-        val layoutManager = StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL)
-
-        downloadsList.layoutManager = layoutManager
-        downloadsList.adapter = adapter
-
-        // We don't change the item animator so we cast it directly
-        (downloadsList.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-        updateNoItemVisibility()
-
-        viewModel.downloadItems.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .bindUntilEvent(this@DownloadsListActivity, Lifecycle.Event.ON_DESTROY)
-                .subscribe { items ->
-                    Pasteur.info(TAG, "refresh items: ${items.size}")
-                    adapter.refresh(items)
-                    updateNoItemVisibility()
-                }
+        noItemView.setVisible(adapter.data.isEmpty())
     }
 
     override fun onClickRetry(item: DownloadItem) {
-        launch {
-            viewModel.resetItemStatus(item.id)
-            adapter.updateItem(item)
+        viewModel.resetItemStatus(item.id)
 
-            val intent = Intent(this@DownloadsListActivity, DownloadService::class.java).apply {
-                putExtra(Params.NAME_KEY, item.fileName)
-                putExtra(Params.URL_KEY, item.downloadUrl)
-            }
-            startService(intent)
+        val intent = Intent(this@DownloadsListActivity, DownloadService::class.java).apply {
+            putExtra(Params.NAME_KEY, item.fileName)
+            putExtra(Params.URL_KEY, item.downloadUrl)
         }
+        startService(intent)
     }
 
     override fun onClickDelete(item: DownloadItem) {
-        launch {
-            viewModel.deleteItem(item.id)
-            adapter.updateItem(item)
+        viewModel.deleteItem(item.id)
 
-            val intent = Intent(this@DownloadsListActivity, DownloadService::class.java).apply {
-                putExtra(Params.CANCELED_KEY, true)
-                putExtra(Params.URL_KEY, item.downloadUrl)
-            }
-
-            startService(intent)
+        val intent = Intent(this@DownloadsListActivity, DownloadService::class.java).apply {
+            putExtra(Params.CANCELED_KEY, true)
+            putExtra(Params.URL_KEY, item.downloadUrl)
         }
+
+        startService(intent)
     }
 
     override fun onClickCancel(item: DownloadItem) {
-        launch {
-            viewModel.updateItemStatus(item.id, DownloadItem.DOWNLOAD_STATUS_FAILED)
-            adapter.updateItem(item)
+        viewModel.updateItemStatus(item.id, DownloadItem.DOWNLOAD_STATUS_FAILED)
 
-            val intent = Intent(this@DownloadsListActivity, DownloadService::class.java).apply {
-                putExtra(Params.CANCELED_KEY, true)
-                putExtra(Params.URL_KEY, item.downloadUrl)
-            }
-
-            startService(intent)
+        val intent = Intent(this@DownloadsListActivity, DownloadService::class.java).apply {
+            putExtra(Params.CANCELED_KEY, true)
+            putExtra(Params.URL_KEY, item.downloadUrl)
         }
+
+        startService(intent)
     }
 
     override fun onApplySystemInsets(top: Int, bottom: Int) {

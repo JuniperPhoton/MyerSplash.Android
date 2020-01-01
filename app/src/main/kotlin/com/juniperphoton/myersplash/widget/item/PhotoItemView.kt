@@ -16,13 +16,12 @@ import com.facebook.drawee.view.SimpleDraweeView
 import com.juniperphoton.myersplash.R
 import com.juniperphoton.myersplash.extension.extractThemeColor
 import com.juniperphoton.myersplash.extension.getDarker
+import com.juniperphoton.myersplash.extension.setVisible
 import com.juniperphoton.myersplash.extension.toHexString
-import com.juniperphoton.myersplash.extension.updateVisibility
 import com.juniperphoton.myersplash.model.UnsplashImage
-import com.juniperphoton.myersplash.utils.LocalSettingHelper
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 typealias OnClickPhotoListener = ((rectF: RectF, unsplashImage: UnsplashImage, itemView: View) -> Unit)
@@ -55,6 +54,8 @@ class PhotoItemView(context: Context, attrs: AttributeSet?) : ConstraintLayout(c
 
     private var unsplashImage: UnsplashImage? = null
 
+    private var extractColorJob: Job? = null
+
     override fun onFinishInflate() {
         super.onFinishInflate()
         ButterKnife.bind(this, this)
@@ -71,7 +72,7 @@ class PhotoItemView(context: Context, attrs: AttributeSet?) : ConstraintLayout(c
     fun bind(image: UnsplashImage?, pos: Int) {
         if (image == null) return
 
-        cancel()
+        extractColorJob?.cancel()
 
         unsplashImage = image
 
@@ -79,11 +80,7 @@ class PhotoItemView(context: Context, attrs: AttributeSet?) : ConstraintLayout(c
             tryUpdateThemeColor()
         }
 
-        val showDownloadButton = LocalSettingHelper.getBoolean(context,
-                context.getString(R.string.preference_key_quick_download), true)
-        downloadRL.visibility = if (showDownloadButton) View.VISIBLE else View.GONE
-
-        todayTag.updateVisibility(image.showTodayTag)
+        todayTag.setVisible(image.showTodayTag)
         rootView.background = ColorDrawable(image.themeColor.getDarker(0.7f))
         simpleDraweeView.setImageURI(image.listUrl)
 
@@ -107,7 +104,7 @@ class PhotoItemView(context: Context, attrs: AttributeSet?) : ConstraintLayout(c
     }
 
     private fun tryUpdateThemeColor() {
-        launch {
+        extractColorJob = launch {
             try {
                 val color = unsplashImage?.extractThemeColor() ?: Int.MIN_VALUE
                 if (color != Int.MIN_VALUE) {

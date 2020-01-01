@@ -2,10 +2,6 @@ package com.juniperphoton.myersplash.extension
 
 import java.io.Closeable
 
-/**
- * @author JuniperPhoton @ Zhihu Inc.
- * @since 2019-04-27
- */
 fun <T : Closeable, R : Closeable> using(t: T, r: R, block: (T, R) -> Unit) {
     t.use {
         r.use {

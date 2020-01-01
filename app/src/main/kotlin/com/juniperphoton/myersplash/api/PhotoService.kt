@@ -1,28 +1,28 @@
 package com.juniperphoton.myersplash.api
 
+import com.juniperphoton.myersplash.api.CloudService.DEFAULT_REQUEST_COUNT
 import com.juniperphoton.myersplash.model.SearchResult
-import com.juniperphoton.myersplash.model.UnsplashFeaturedImage
 import com.juniperphoton.myersplash.model.UnsplashImage
-import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
 import retrofit2.http.Query
-import retrofit2.http.Url
+
+const val TAG = "PhotoService"
 
 interface PhotoService {
-    @GET
-    fun getPhotosAsync(@Url url: String,
-                       @Query("page") page: Int,
-                       @Query("per_page") per_page: Int): Deferred<MutableList<UnsplashImage>>
+    @GET("/photos")
+    suspend fun getNewPhotos(@Query("page") page: Int,
+                             @Query("per_page") per_page: Int = DEFAULT_REQUEST_COUNT
+    ): MutableList<UnsplashImage>
 
-    @Deprecated("")
-    @GET
-    fun getFeaturedPhotosAsync(@Url url: String,
-                               @Query("page") page: Int,
-                               @Query("per_page") per_page: Int): Deferred<MutableList<UnsplashFeaturedImage>>
+    @GET("/users/juniperphoton/photos")
+    suspend fun getDeveloperPhotos(@Query("page") page: Int,
+                                   @Query("per_page") per_page: Int = DEFAULT_REQUEST_COUNT
+    ): MutableList<UnsplashImage>
 
-    @GET
-    fun searchPhotosByQueryAsync(@Url url: String,
-                                 @Query("page") page: Int,
-                                 @Query("per_page") per_page: Int,
-                                 @Query("query") query: String): Deferred<SearchResult>
+    @GET("/search/photos")
+    suspend fun searchPhotosByQuery(
+            @Query("query") query: String,
+            @Query("page") page: Int,
+            @Query("per_page") per_page: Int = DEFAULT_REQUEST_COUNT
+    ): SearchResult
 }

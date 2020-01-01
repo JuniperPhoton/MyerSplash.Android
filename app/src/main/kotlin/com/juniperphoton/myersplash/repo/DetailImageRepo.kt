@@ -1,11 +1,11 @@
-package com.juniperphoton.myersplash.db
+package com.juniperphoton.myersplash.repo
 
+import com.juniperphoton.myersplash.db.DownloadItemDao
 import com.juniperphoton.myersplash.model.DownloadItem
 import io.reactivex.Flowable
+import javax.inject.Inject
 
-class DetailImageRepo {
-    private val dao = AppDatabase.instance.downloadItemDao()
-
+class DetailImageRepo @Inject constructor(private val dao: DownloadItemDao) {
     fun retrieveAssociatedItem(id: String): Flowable<DownloadItem> {
         return dao.getById(id)
     }

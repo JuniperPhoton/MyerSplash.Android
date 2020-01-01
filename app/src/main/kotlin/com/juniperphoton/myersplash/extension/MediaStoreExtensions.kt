@@ -9,10 +9,6 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 
-/**
- * @author JuniperPhoton @ Zhihu Inc.
- * @since 2019-04-02
- */
 object MediaStoreExtensions {
     fun insertImage(cr: ContentResolver, filePath: String, title: String?, desc: String?): Uri? {
         val file = File(filePath)

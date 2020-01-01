@@ -16,7 +16,7 @@ fun View.getActivity(): Activity? {
     return null
 }
 
-fun View.updateVisibility(visible: Boolean) {
+fun View.setVisible(visible: Boolean) {
     visibility = if (visible) {
         View.VISIBLE
     } else {

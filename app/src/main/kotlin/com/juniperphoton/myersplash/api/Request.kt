@@ -1,7 +1,7 @@
 package com.juniperphoton.myersplash.api
 
 object Request {
-    private const val MY_DOMAIN = "juniperphoton.dev"
+    const val MY_DOMAIN = "juniperphoton.dev"
 
     const val BASE_URL = "https://api.unsplash.com/"
     const val PHOTO_URL = "https://api.unsplash.com/photos?"

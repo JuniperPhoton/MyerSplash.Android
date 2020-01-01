@@ -2,10 +2,6 @@ package com.juniperphoton.myersplash.utils
 
 import com.microsoft.appcenter.analytics.Analytics
 
-/**
- * @author JuniperPhoton @ Zhihu Inc.
- * @since 2019-03-26
- */
 object AnalysisHelper {
     fun logTabSelected(name: String) {
         Analytics.trackEvent("Tab selected", mapOf("Name" to name))

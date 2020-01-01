@@ -1,13 +1,8 @@
 package com.juniperphoton.myersplash.api
 
 import android.annotation.SuppressLint
-import android.util.Log
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.juniperphoton.myersplash.BuildConfig
-import com.juniperphoton.myersplash.model.UnsplashImage
-import com.juniperphoton.myersplash.model.UnsplashImageFactory
-import com.juniperphoton.myersplash.presenter.MainListPresenter.Companion.DEFAULT_PAGING
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withTimeout
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
@@ -17,8 +12,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
-import java.text.SimpleDateFormat
-import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
@@ -27,19 +20,16 @@ import javax.net.ssl.X509TrustManager
 @Suppress("DEPRECATION")
 object CloudService {
     private const val DEFAULT_TIMEOUT = 10
-    private const val DEFAULT_REQUEST_COUNT = 10
-    private const val DEFAULT_HIGHLIGHTS_COUNT = 60
+    const val DEFAULT_REQUEST_COUNT = 10
+    const val DEFAULT_HIGHLIGHTS_COUNT = 60
 
     private const val DOWNLOAD_TIMEOUT_MS = 30_000L
-    private const val HIGHLIGHTS_DELAY_MS = 200L
+    const val HIGHLIGHTS_DELAY_MS = 200L
 
-    private const val TAG = "CloudService"
+    val retrofit: Retrofit
 
-    private val endDate = SimpleDateFormat("yyyy/MM/dd").parse("2017/03/20")
-
-    private val retrofit: Retrofit
     private val photoService: PhotoService
-    private val ioService: IOService
+    private val ioService: ReportService
     private val builder: OkHttpClient.Builder = OkHttpClient.Builder()
 
     init {
@@ -75,50 +65,11 @@ object CloudService {
                 .build()
 
         photoService = retrofit.create(PhotoService::class.java)
-        ioService = retrofit.create(IOService::class.java)
+        ioService = retrofit.create(ReportService::class.java)
     }
 
-    suspend fun getPhotos(url: String,
-                          page: Int): MutableList<UnsplashImage> {
-        val list = photoService.getPhotosAsync(url, page, DEFAULT_REQUEST_COUNT).await()
-        if (page == DEFAULT_PAGING) {
-            list.add(0, UnsplashImageFactory.createTodayImage())
-        }
-        return list
-    }
-
-    suspend fun getDeveloperPhotos(url: String,
-                                   page: Int): MutableList<UnsplashImage> {
-        return photoService
-                .getPhotosAsync(url, page, DEFAULT_REQUEST_COUNT).await()
-    }
-
-    suspend fun getHighlightsPhotos(page: Int): MutableList<UnsplashImage> {
-        val calendar = Calendar.getInstance(TimeZone.getDefault())
-        calendar.add(Calendar.DATE, -(page - 1) * DEFAULT_HIGHLIGHTS_COUNT)
-
-        val list = mutableListOf<UnsplashImage>()
-
-        for (i in 0 until DEFAULT_HIGHLIGHTS_COUNT) {
-            val date = calendar.time
-            if (date > endDate) {
-                list.add(UnsplashImageFactory.createHighlightImage(calendar.time))
-            } else {
-                Log.w(TAG, "the date: $date is before end date $endDate")
-            }
-            calendar.add(Calendar.DATE, -1)
-        }
-
-        delay(HIGHLIGHTS_DELAY_MS)
-
-        return list
-    }
-
-    suspend fun searchPhotos(url: String,
-                             page: Int,
-                             query: String): MutableList<UnsplashImage> {
-        return photoService
-                .searchPhotosByQueryAsync(url, page, DEFAULT_REQUEST_COUNT, query).await().list!!
+    inline fun <reified T> createService(): T {
+        return retrofit.create(T::class.java)
     }
 
     suspend fun downloadPhoto(url: String): ResponseBody {

@@ -8,16 +8,15 @@ import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.appbar.AppBarLayout
 import com.juniperphoton.myersplash.activity.BaseActivity
 import com.juniperphoton.myersplash.activity.DownloadsListActivity
-import com.juniperphoton.myersplash.adapter.MainListFragmentAdapter
-import com.juniperphoton.myersplash.event.ScrollToTopEvent
+import com.juniperphoton.myersplash.adapter.MainAdapter
 import com.juniperphoton.myersplash.extension.getStatusBarHeight
 import com.juniperphoton.myersplash.extension.pow
 import com.juniperphoton.myersplash.extension.startServiceSafely
@@ -26,9 +25,10 @@ import com.juniperphoton.myersplash.service.DownloadService
 import com.juniperphoton.myersplash.utils.AnalysisHelper
 import com.juniperphoton.myersplash.utils.Params
 import com.juniperphoton.myersplash.utils.PermissionUtils
+import com.juniperphoton.myersplash.viewmodel.AppViewModelProviders
+import com.juniperphoton.myersplash.viewmodel.ImageSharedViewModel
 import com.juniperphoton.myersplash.widget.PivotTitleBar
 import kotlinx.android.synthetic.main.activity_main.*
-import org.greenrobot.eventbus.EventBus
 import kotlin.math.abs
 import kotlin.math.sqrt
 
@@ -46,16 +46,36 @@ class MainActivity : BaseActivity() {
                 2 to UnsplashCategory.HIGHLIGHTS_CATEGORY_ID)
     }
 
-    private var mainListFragmentAdapter: MainListFragmentAdapter? = null
+    private var mainAdapter: MainAdapter? = null
 
     private var handleShortcut: Boolean = false
     private var initNavigationIndex = PivotTitleBar.DEFAULT_SELECTED
     private var fabPositionX: Int = 0
     private var fabPositionY: Int = 0
 
+    private lateinit var sharedViewModel: ImageSharedViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        sharedViewModel = AppViewModelProviders.of(this).get(ImageSharedViewModel::class.java).apply {
+            onClickedImage.observe(this@MainActivity, Observer { data ->
+                data ?: return@Observer
+
+                val rectF = data.rectF
+                val unsplashImage = data.unsplashImage
+                val view = data.itemView
+
+                val location = IntArray(2)
+                tagView.getLocationOnScreen(location)
+                if (rectF.top <= location[1] + tagView.height) {
+                    tagView.animate().alpha(0f).setDuration(100).start()
+                }
+
+                imageDetailView.show(rectF, unsplashImage, view)
+            })
+        }
 
         handleShortcutsAction()
 
@@ -82,7 +102,7 @@ class MainActivity : BaseActivity() {
     private fun initShortcuts() {
         @TargetApi(android.os.Build.VERSION_CODES.N_MR1)
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
-            val shortcutManager = getSystemService(ShortcutManager::class.java)
+            val shortcutManager = getSystemService(ShortcutManager::class.java) ?: return
             if (shortcutManager.dynamicShortcuts.size > 0) {
                 shortcutManager.removeAllDynamicShortcuts()
             }
@@ -98,17 +118,21 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         val index = viewPager.currentItem
         if (index in 0..2) {
-            outState?.putInt(SAVED_NAVIGATION_INDEX, viewPager.currentItem)
+            outState.putInt(SAVED_NAVIGATION_INDEX, viewPager.currentItem)
         }
-        super.onSaveInstanceState(outState, outPersistentState)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onResume() {
         super.onResume()
         PermissionUtils.checkAndRequest(this@MainActivity)
+    }
+
+    private fun getCurrentPageId(): Int {
+        return ID_MAPS[pivotTitleBar.selectedItem]!!
     }
 
     private fun toggleSearchView(show: Boolean, useAnimation: Boolean) {
@@ -182,26 +206,15 @@ class MainActivity : BaseActivity() {
 
             onSingleTap = {
                 viewPager.currentItem = it
-                EventBus.getDefault().post(ScrollToTopEvent(ID_MAPS[it]!!, false))
-            }
-            onDoubleTap = {
-                viewPager.currentItem = it
-                EventBus.getDefault().post(ScrollToTopEvent(ID_MAPS[it]!!, true))
+                sharedViewModel.onRequestScrollToTop.value = getCurrentPageId()
             }
             selectedItem = initNavigationIndex
         }
 
-        mainListFragmentAdapter = MainListFragmentAdapter({ rectF, unsplashImage, itemView ->
-            val location = IntArray(2)
-            tagView.getLocationOnScreen(location)
-            if (rectF.top <= location[1] + tagView.height) {
-                tagView.animate().alpha(0f).setDuration(100).start()
-            }
-            imageDetailView.show(rectF, unsplashImage, itemView)
-        }, supportFragmentManager)
+        mainAdapter = MainAdapter(supportFragmentManager)
 
         viewPager.apply {
-            adapter = mainListFragmentAdapter
+            adapter = mainAdapter
             currentItem = initNavigationIndex
             offscreenPageLimit = 3
             addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
@@ -243,7 +256,7 @@ class MainActivity : BaseActivity() {
                 })
 
         tagView.setOnClickListener {
-            EventBus.getDefault().post(ScrollToTopEvent(ID_MAPS[pivotTitleBar.selectedItem]!!, false))
+            sharedViewModel.onRequestScrollToTop.value = getCurrentPageId()
         }
     }
 
@@ -277,7 +290,7 @@ class MainActivity : BaseActivity() {
             if (searchView.tryHide()) {
                 return
             }
-            toggleSearchView(false, true)
+            toggleSearchView(show = false, useAnimation = true)
             return
         }
         if (imageDetailView.tryHide()) {

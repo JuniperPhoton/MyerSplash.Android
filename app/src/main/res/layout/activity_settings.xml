@@ -34,15 +34,6 @@
                         android:text="@string/personalization" />
 
                 <com.juniperphoton.myersplash.widget.SettingsItemLayout
-                        android:id="@+id/quickDownloadSettings"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:has_checkbox="true"
-                        app:preference_key="@string/preference_key_quick_download"
-                        app:setting_content="@string/settings_quick_download"
-                        app:setting_title="@string/settings_quick_download_title" />
-
-                <com.juniperphoton.myersplash.widget.SettingsItemLayout
                         android:id="@+id/metered_settings"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

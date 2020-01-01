@@ -1,46 +1,40 @@
 package com.juniperphoton.myersplash.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import com.juniperphoton.myersplash.db.AppDatabase
-import com.juniperphoton.myersplash.db.DownloadItemsRepo
+import androidx.lifecycle.LiveData
 import com.juniperphoton.myersplash.model.DownloadItem
-import io.reactivex.Flowable
-import kotlinx.coroutines.CoroutineScope
+import com.juniperphoton.myersplash.repo.DownloadItemsRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class DownloadListViewModel(application: Application
-) : AndroidViewModel(application), CoroutineScope by CoroutineScope(Dispatchers.Main) {
-    private val repository: DownloadItemsRepo
+) : BaseViewModel(application) {
+    @Inject
+    lateinit var repository: DownloadItemsRepo
 
-    val downloadItems: Flowable<List<DownloadItem>>
+    val downloadItems: LiveData<List<DownloadItem>>
         get() = repository.downloadItems
 
-    init {
-        val dao = AppDatabase.instance.downloadItemDao()
-        repository = DownloadItemsRepo(dao)
+    fun deleteByStatus(status: Int) = launch(Dispatchers.IO) {
+        repository.deleteByStatus(status)
+    }
+
+    fun updateItemStatus(id: String, status: Int) = launch(Dispatchers.IO) {
+        repository.updateStatus(id, status)
+    }
+
+    fun resetItemStatus(id: String) = launch(Dispatchers.IO) {
+        repository.resetStatus(id)
+    }
+
+    fun deleteItem(id: String) = launch(Dispatchers.IO) {
+        repository.deleteById(id)
     }
 
     override fun onCleared() {
         cancel()
         super.onCleared()
-    }
-
-    suspend fun deleteByStatus(status: Int) = withContext(Dispatchers.IO) {
-        repository.deleteByStatus(status)
-    }
-
-    suspend fun updateItemStatus(id: String, status: Int) {
-        repository.updateStatus(id, status)
-    }
-
-    suspend fun resetItemStatus(id: String) {
-        repository.resetStatus(id)
-    }
-
-    suspend fun deleteItem(id: String)  {
-        repository.deleteById(id)
     }
 }

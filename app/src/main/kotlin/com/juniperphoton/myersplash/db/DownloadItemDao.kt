@@ -12,7 +12,7 @@ import io.reactivex.Flowable
 @Dao
 abstract class DownloadItemDao {
     @Query("SELECT * FROM download_item ORDER BY create_time DESC")
-    abstract fun getAll(): Flowable<List<DownloadItem>>
+    abstract fun getAll(): LiveData<List<DownloadItem>>
 
     @Query("SELECT * FROM download_item WHERE id=:id")
     abstract fun getById(id: String): Flowable<DownloadItem>

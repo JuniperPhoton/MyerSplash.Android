@@ -5,7 +5,7 @@ import retrofit2.http.GET
 import retrofit2.http.Streaming
 import retrofit2.http.Url
 
-interface IOService {
+interface ReportService {
     @Streaming
     @GET
     suspend fun downloadFileAsync(@Url fileUrl: String): ResponseBody

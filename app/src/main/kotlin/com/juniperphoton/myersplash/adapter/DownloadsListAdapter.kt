@@ -41,10 +41,8 @@ class DownloadsListAdapter(private val context: Context) :
     }
 
     override fun getItemId(position: Int): Long {
-        if (position < 0 || position >= data.size) {
-            return RecyclerView.NO_ID
-        }
-        return data[position].id.hashCode().toLong()
+        val item = data.getOrNull(position) ?: return RecyclerView.NO_ID
+        return item.id.hashCode().toLong()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DownloadItemViewHolder {
@@ -75,16 +73,7 @@ class DownloadsListAdapter(private val context: Context) :
         notifyDataSetChanged()
     }
 
-    fun updateItem(item: DownloadItem) {
-        val index = data.indexOf(item)
-        if (index >= 0 && index <= data.size) {
-            Pasteur.d(TAG, "notifyItemChanged:$index, item: $item")
-            notifyItemChanged(index)
-        }
-    }
-
     inner class DownloadItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private var previewRoot: ConstraintLayout? = itemView.findViewById(R.id.download_preview_root)
         private var draweeView: SimpleDraweeView? = itemView.findViewById(R.id.row_download_item_dv)
         private var flipperLayout: FlipperLayout? = itemView.findViewById(R.id.row_download_flipper_layout)
         private var downloadingView: DownloadingView? = itemView.findViewById(R.id.row_downloading_view)
