@@ -36,6 +36,7 @@ import com.juniperphoton.flipperlayout.FlipperLayout
 import com.juniperphoton.myersplash.R
 import com.juniperphoton.myersplash.activity.EditActivity
 import com.juniperphoton.myersplash.extension.*
+import com.juniperphoton.myersplash.misc.Action
 import com.juniperphoton.myersplash.model.DownloadItem
 import com.juniperphoton.myersplash.model.UnsplashImage
 import com.juniperphoton.myersplash.utils.*
@@ -47,8 +48,6 @@ import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.*
 import java.io.File
 import java.util.concurrent.TimeUnit
-
-typealias Action = () -> Unit
 
 @Suppress("unused")
 class ImageDetailView(context: Context, attrs: AttributeSet
@@ -176,17 +175,20 @@ class ImageDetailView(context: Context, attrs: AttributeSet
         viewModel = AppViewModelProviders.of(activity)
                 .get(ImageDetailViewModel::class.java)
                 .apply {
-                    navigateToAuthorPage.observe(activity, Observer { url ->
-                        url ?: return@Observer
-                        navigateToAuthorPage(url)
+                    navigateToAuthorPage.observe(activity, Observer { e ->
+                        e?.consume {
+                            navigateToAuthorPage(it)
+                        }
                     })
-                    share.observe(activity, Observer { image ->
-                        image ?: return@Observer
-                        doShare(image)
+                    share.observe(activity, Observer { e ->
+                        e?.consume {
+                            doShare(it)
+                        }
                     })
-                    launchEdit.observe(activity, Observer { uri ->
-                        uri ?: return@Observer
-                        launchEditActivity(uri)
+                    launchEdit.observe(activity, Observer { e ->
+                        e?.consume {
+                            launchEditActivity(it)
+                        }
                     })
                 }
 

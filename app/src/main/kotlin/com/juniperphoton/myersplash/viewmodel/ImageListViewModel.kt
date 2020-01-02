@@ -3,6 +3,8 @@ package com.juniperphoton.myersplash.viewmodel
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.juniperphoton.myersplash.LiveDataEvent
+import com.juniperphoton.myersplash.liveDataEvent
 import com.juniperphoton.myersplash.model.UnsplashImage
 import com.juniperphoton.myersplash.repo.ImageRepo
 import com.juniperphoton.myersplash.repo.SearchImageRepo
@@ -20,16 +22,16 @@ open class ImageListViewModel(application: Application
     @Inject
     lateinit var repo: ImageRepo
 
-    private val _showError = MutableLiveData<Boolean>()
-    val showError: LiveData<Boolean>
+    private val _showError = MutableLiveData<LiveDataEvent<Boolean>>()
+    val showError: LiveData<LiveDataEvent<Boolean>>
         get() = _showError
 
-    private val _showLoadingMoreError = MutableLiveData<Boolean>()
-    val showLoadingMoreError: LiveData<Boolean>
+    private val _showLoadingMoreError = MutableLiveData<LiveDataEvent<Boolean>>()
+    val showLoadingMoreError: LiveData<LiveDataEvent<Boolean>>
         get() = _showLoadingMoreError
 
-    private val _refreshing = MutableLiveData<Boolean>()
-    val refreshing: LiveData<Boolean>
+    private val _refreshing = MutableLiveData<LiveDataEvent<Boolean>>()
+    val refreshing: LiveData<LiveDataEvent<Boolean>>
         get() = _refreshing
 
     private var loadingMore = false
@@ -38,22 +40,22 @@ open class ImageListViewModel(application: Application
         get() = repo.images
 
     fun refresh() = launch {
-        if (_refreshing.value == true || loadingMore) {
+        if (_refreshing.value?.peek() == true || loadingMore) {
             return@launch
         }
 
         try {
-            _refreshing.value = true
+            _refreshing.value = true.liveDataEvent
             repo.refresh()
         } catch (e: Exception) {
-            _showError.value = true
+            _showError.value = true.liveDataEvent
         } finally {
-            _refreshing.value = false
+            _refreshing.value = false.liveDataEvent
         }
     }
 
     fun loadMore() = launch {
-        if (_refreshing.value == true || loadingMore
+        if (_refreshing.value?.peek() == true || loadingMore
                 || images.value == null || images.value?.isEmpty() == true) {
             return@launch
         }
@@ -65,7 +67,7 @@ open class ImageListViewModel(application: Application
             Pasteur.w(TAG) {
                 "error on loading more: $e"
             }
-            _showLoadingMoreError.value = true
+            _showLoadingMoreError.value = true.liveDataEvent
         } finally {
             loadingMore = false
         }

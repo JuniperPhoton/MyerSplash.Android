@@ -7,7 +7,9 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.juniperphoton.myersplash.LiveDataEvent
 import com.juniperphoton.myersplash.R
+import com.juniperphoton.myersplash.liveDataEvent
 import com.juniperphoton.myersplash.model.DownloadItem
 import com.juniperphoton.myersplash.model.UnsplashImage
 import com.juniperphoton.myersplash.repo.DetailImageRepo
@@ -36,21 +38,21 @@ class ImageDetailViewModel(app: Application) : BaseViewModel(app) {
             }
         }
 
-    private val _navigateToAuthorPage = MutableLiveData<String>()
-    val navigateToAuthorPage: LiveData<String>
+    private val _navigateToAuthorPage = MutableLiveData<LiveDataEvent<String>>()
+    val navigateToAuthorPage: LiveData<LiveDataEvent<String>>
         get() = _navigateToAuthorPage
 
-    private val _share = MutableLiveData<UnsplashImage>()
-    val share: LiveData<UnsplashImage>
+    private val _share = MutableLiveData<LiveDataEvent<UnsplashImage>>()
+    val share: LiveData<LiveDataEvent<UnsplashImage>>
         get() = _share
 
-    private val _launchEdit = MutableLiveData<Uri>()
-    val launchEdit: LiveData<Uri>
+    private val _launchEdit = MutableLiveData<LiveDataEvent<Uri>>()
+    val launchEdit: LiveData<LiveDataEvent<Uri>>
         get() = _launchEdit
 
     fun navigateToAuthorPage() {
         unsplashImage?.userHomePage?.let {
-            _navigateToAuthorPage.value = it
+            _navigateToAuthorPage.value = it.liveDataEvent
         }
     }
 
@@ -62,7 +64,7 @@ class ImageDetailViewModel(app: Application) : BaseViewModel(app) {
 
     fun share() {
         unsplashImage?.let {
-            _share.value = it
+            _share.value = it.liveDataEvent
         }
     }
 
@@ -86,7 +88,7 @@ class ImageDetailViewModel(app: Application) : BaseViewModel(app) {
     fun setAs() {
         AnalysisHelper.logClickSetAsInDetails()
         val url = "${downloadItem?.filePath}"
-        _launchEdit.value = Uri.fromFile(File(url))
+        _launchEdit.value = Uri.fromFile(File(url)).liveDataEvent
     }
 
     fun onHide() {

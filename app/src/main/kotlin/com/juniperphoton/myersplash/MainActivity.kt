@@ -24,6 +24,7 @@ import com.juniperphoton.myersplash.model.UnsplashCategory
 import com.juniperphoton.myersplash.service.DownloadService
 import com.juniperphoton.myersplash.utils.AnalysisHelper
 import com.juniperphoton.myersplash.utils.Params
+import com.juniperphoton.myersplash.utils.Pasteur
 import com.juniperphoton.myersplash.utils.PermissionUtils
 import com.juniperphoton.myersplash.viewmodel.AppViewModelProviders
 import com.juniperphoton.myersplash.viewmodel.ImageSharedViewModel
@@ -34,6 +35,8 @@ import kotlin.math.sqrt
 
 class MainActivity : BaseActivity() {
     companion object {
+        private const val TAG = "MainActivity"
+
         private const val SAVED_NAVIGATION_INDEX = "navigation_index"
         private const val DOWNLOADS_SHORTCUT_ID = "downloads_shortcut"
 
@@ -61,19 +64,23 @@ class MainActivity : BaseActivity() {
 
         sharedViewModel = AppViewModelProviders.of(this).get(ImageSharedViewModel::class.java).apply {
             onClickedImage.observe(this@MainActivity, Observer { data ->
-                data ?: return@Observer
+                data?.consume {
+                    Pasteur.i(TAG) {
+                        "onClickedImage $data"
+                    }
 
-                val rectF = data.rectF
-                val unsplashImage = data.unsplashImage
-                val view = data.itemView
+                    val rectF = it.rectF
+                    val unsplashImage = it.unsplashImage
+                    val view = it.itemView
 
-                val location = IntArray(2)
-                tagView.getLocationOnScreen(location)
-                if (rectF.top <= location[1] + tagView.height) {
-                    tagView.animate().alpha(0f).setDuration(100).start()
+                    val location = IntArray(2)
+                    tagView.getLocationOnScreen(location)
+                    if (rectF.top <= location[1] + tagView.height) {
+                        tagView.animate().alpha(0f).setDuration(100).start()
+                    }
+
+                    imageDetailView.show(rectF, unsplashImage, view)
                 }
-
-                imageDetailView.show(rectF, unsplashImage, view)
             })
         }
 
@@ -206,7 +213,7 @@ class MainActivity : BaseActivity() {
 
             onSingleTap = {
                 viewPager.currentItem = it
-                sharedViewModel.onRequestScrollToTop.value = getCurrentPageId()
+                sharedViewModel.onRequestScrollToTop.value = getCurrentPageId().liveDataEvent
             }
             selectedItem = initNavigationIndex
         }
@@ -256,7 +263,7 @@ class MainActivity : BaseActivity() {
                 })
 
         tagView.setOnClickListener {
-            sharedViewModel.onRequestScrollToTop.value = getCurrentPageId()
+            sharedViewModel.onRequestScrollToTop.value = getCurrentPageId().liveDataEvent
         }
     }
 

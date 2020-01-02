@@ -14,6 +14,7 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import com.juniperphoton.myersplash.R
 import com.juniperphoton.myersplash.extension.isLightColor
+import com.juniperphoton.myersplash.misc.Action
 
 @Suppress("unused")
 class DownloadingView(context: Context, attrs: AttributeSet) : FrameLayout(context, attrs) {

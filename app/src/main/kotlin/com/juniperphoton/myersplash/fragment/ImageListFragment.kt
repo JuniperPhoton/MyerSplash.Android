@@ -16,6 +16,7 @@ import com.juniperphoton.myersplash.di.AppComponent
 import com.juniperphoton.myersplash.di.DaggerImageComponent
 import com.juniperphoton.myersplash.extension.setVisible
 import com.juniperphoton.myersplash.extension.usingWifi
+import com.juniperphoton.myersplash.liveDataEvent
 import com.juniperphoton.myersplash.model.UnsplashCategory
 import com.juniperphoton.myersplash.model.UnsplashImage
 import com.juniperphoton.myersplash.utils.*
@@ -99,20 +100,23 @@ class ImageListFragment : Fragment() {
             })
 
             refreshing.observe(this@ImageListFragment, Observer { e ->
-                e ?: return@Observer
-                refreshLayout.isRefreshing = e
+                e?.consume {
+                    refreshLayout.isRefreshing = it
+                }
             })
 
             showError.observe(this@ImageListFragment, Observer { e ->
-                e ?: return@Observer
-                updateNoItemVisibility(e)
+                e?.consume {
+                    updateNoItemVisibility(it)
+                }
             })
 
             showLoadingMoreError.observe(this@ImageListFragment, Observer { e ->
-                e ?: return@Observer
-                updateNoItemVisibility(false)
-                adapter?.indicateLoadMoreError()
-                Toaster.sendShortToast(R.string.failed_to_send_request)
+                e?.consume {
+                    updateNoItemVisibility(false)
+                    adapter?.indicateLoadMoreError()
+                    Toaster.sendShortToast(R.string.failed_to_send_request)
+                }
             })
 
             refresh()
@@ -120,15 +124,17 @@ class ImageListFragment : Fragment() {
 
         sharedViewModel.apply {
             onRequestRefresh.observe(this@ImageListFragment, Observer { e ->
-                e ?: return@Observer
-                if (e == type) {
-                    viewModel.refresh()
+                e?.consume {
+                    if (it == type) {
+                        viewModel.refresh()
+                    }
                 }
             })
             onRequestScrollToTop.observe(this@ImageListFragment, Observer { e ->
-                e ?: return@Observer
-                if (e == type) {
-                    scrollToTop()
+                e?.consume {
+                    if (it == type) {
+                        scrollToTop()
+                    }
                 }
             })
         }
@@ -139,7 +145,7 @@ class ImageListFragment : Fragment() {
                 download(image)
             }
             onClickPhoto = { r, i, v ->
-                sharedViewModel.onClickedImage.value = ClickData(r, i, v)
+                sharedViewModel.onClickedImage.value = ClickData(r, i, v).liveDataEvent
             }
         }
 
