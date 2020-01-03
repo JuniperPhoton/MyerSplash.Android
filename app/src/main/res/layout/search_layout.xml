@@ -1,112 +1,113 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/detail_search_root_rl"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/primaryBackgroundColor">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/detail_search_root_rl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primaryBackgroundColor">
 
     <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/search_toolbar_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/primaryBackgroundColor"
-            android:theme="@style/AppTheme.AppBarOverlay">
+        android:id="@+id/search_toolbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primaryBackgroundColor"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="0dp">
 
         <RelativeLayout
-                android:id="@+id/search_box"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/search_bar_height"
-                android:layout_marginTop="@dimen/search_bar_margin"
-                app:layout_scrollFlags="scroll|enterAlways">
+            android:id="@+id/search_box"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/search_bar_height"
+            android:layout_marginTop="@dimen/search_bar_margin"
+            app:layout_scrollFlags="scroll|enterAlways">
 
             <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/search_bar_height"
-                    android:layout_alignParentRight="true"
-                    android:background="@color/primaryBackgroundColor"
-                    android:gravity="end">
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/search_bar_height"
+                android:layout_alignParentRight="true"
+                android:background="@color/primaryBackgroundColor"
+                android:gravity="end">
 
                 <FrameLayout
-                        android:id="@+id/detail_clear_btn"
-                        android:layout_width="@dimen/search_bar_height"
-                        android:layout_height="@dimen/search_bar_height">
+                    android:id="@+id/detail_clear_btn"
+                    android:layout_width="@dimen/search_bar_height"
+                    android:layout_height="@dimen/search_bar_height">
 
                     <ImageView
-                            android:layout_width="@dimen/search_bar_button_size"
-                            android:layout_height="@dimen/search_bar_button_size"
-                            android:layout_gravity="center"
-                            android:background="?attr/selectableItemBackgroundBorderless"
-                            android:contentDescription="@string/image_desc"
-                            android:padding="@dimen/search_button_padding"
-                            android:tint="@color/primaryTextColor"
-                            android:src="@drawable/ic_close" />
+                        android:layout_width="@dimen/search_bar_button_size"
+                        android:layout_height="@dimen/search_bar_button_size"
+                        android:layout_gravity="center"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/image_desc"
+                        android:padding="@dimen/search_button_padding"
+                        android:src="@drawable/ic_close"
+                        android:tint="@color/primaryTextColor" />
                 </FrameLayout>
 
                 <FrameLayout
-                        android:id="@+id/detail_search_btn"
-                        android:layout_width="@dimen/search_bar_height"
-                        android:layout_height="@dimen/search_bar_height">
+                    android:id="@+id/detail_search_btn"
+                    android:layout_width="@dimen/search_bar_height"
+                    android:layout_height="@dimen/search_bar_height">
 
                     <ImageView
-                            android:layout_width="@dimen/search_bar_button_size"
-                            android:layout_height="@dimen/search_bar_button_size"
-                            android:layout_gravity="center"
-                            android:background="?attr/selectableItemBackgroundBorderless"
-                            android:contentDescription="@string/image_desc"
-                            android:padding="@dimen/search_button_padding"
-                            android:tint="@color/primaryTextColor"
-                            android:src="@drawable/vector_ic_search_white" />
+                        android:layout_width="@dimen/search_bar_button_size"
+                        android:layout_height="@dimen/search_bar_button_size"
+                        android:layout_gravity="center"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/image_desc"
+                        android:padding="@dimen/search_button_padding"
+                        android:src="@drawable/vector_ic_search_white"
+                        android:tint="@color/primaryTextColor" />
                 </FrameLayout>
             </LinearLayout>
 
             <EditText
-                    android:id="@+id/detail_search_et"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="120dp"
-                    android:background="@color/primaryBackgroundColor"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:hint="@string/search_in_english"
-                    android:imeOptions="actionSearch"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:paddingStart="12dp"
-                    android:textColor="@color/primaryTextColor"
-                    android:textColorHint="@color/HintColor"
-                    android:textCursorDrawable="@drawable/cursor"
-                    android:textSize="15sp"
-                    tools:text="Lake" />
+                android:id="@+id/detail_search_et"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="120dp"
+                android:background="@color/primaryBackgroundColor"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:hint="@string/search_in_english"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:maxLines="1"
+                android:paddingStart="16dp"
+                android:textColor="@color/primaryTextColor"
+                android:textColorHint="@color/HintColor"
+                android:textCursorDrawable="@drawable/cursor"
+                android:textSize="15sp"
+                tools:text="Lake" />
 
         </RelativeLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
-            android:id="@+id/search_result_root"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:id="@+id/search_result_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/category_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_marginTop="100dp"
-            android:layout_marginRight="4dp"
-            android:overScrollMode="never" />
+        android:id="@+id/category_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginRight="4dp"
+        android:overScrollMode="never" />
 
     <TextView
-            android:id="@+id/search_tag"
-            style="@style/TagTextView"
-            android:alpha="0"
-            android:clickable="false"
-            tools:alpha="1"
-            tools:text="# LAKE" />
+        android:id="@+id/search_tag"
+        style="@style/TagTextView"
+        android:alpha="0"
+        android:clickable="false"
+        tools:alpha="1"
+        tools:text="# LAKE" />
 
     <com.juniperphoton.myersplash.widget.ImageDetailView
-            android:id="@+id/search_detail_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        android:id="@+id/search_detail_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

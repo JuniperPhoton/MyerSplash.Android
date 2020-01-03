@@ -32,7 +32,7 @@
     <string name="settingsLowercase">设置</string>
     <string name="aboutLowercase">关于</string>
     <string name="random">随机</string>
-    <string name="search_in_english">请用英文搜索</string>
+    <string name="search_in_english">请尽量使用英文搜索</string>
     <string name="no_item">没有内容</string>
     <string name="search_by_other_keywords">通过其他关键字搜索</string>
     <string name="return_to_content">返回到 %s</string>

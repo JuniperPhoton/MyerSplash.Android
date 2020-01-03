@@ -26,4 +26,5 @@
     <color name="highlightFallbackColor1">#525252</color>
 
     <color name="overlay_image">#00FFFFFF</color>
+    <color name="search_background">#FAFAFA</color>
 </resources>

@@ -6,15 +6,27 @@
         <item>@string/delete_failed</item>
     </string-array>
     <string-array name="search_category">
-        <item>Buildings</item>
-        <item>Food</item>
-        <item>Nature</item>
-        <item>Technology</item>
-        <item>Travel</item>
-        <item>People</item>
-        <item>Sea</item>
-        <item>Dusk</item>
-        <item>Mountain</item>
-        <item>Galaxy</item>
+        <item>🔍 Minimalist</item>
+        <item>🏗 Buildings</item>
+        <item>🍰 Food</item>
+        <item>🗻 Nature</item>
+        <item>📱 Technology</item>
+        <item>🏖 Coastal</item>
+        <item>✈️ Travel</item>
+        <item>👀 People</item>
+        <item>🏀 Sport</item>
+        <item>❄️ Snow</item>
+        <item>🌊 Sea</item>
+        <item>🌄 Dusk</item>
+        <item>🌋 Mountain</item>
+        <item>🌌 Galaxy</item>
+        <item>❤️ Red</item>
+        <item>🧡 Orange</item>
+        <item>💛 Yellow</item>
+        <item>💚 Green</item>
+        <item>💙 Blue</item>
+        <item>💜 Purple</item>
+        <item>⚫️ Black</item>
+        <item>⚪️ White</item>
     </string-array>
 </resources>

@@ -10,4 +10,5 @@
     <color name="MaskColor">#cc000000</color>
 
     <color name="overlay_image">#4D000000</color>
+    <color name="search_background">#111111</color>
 </resources>

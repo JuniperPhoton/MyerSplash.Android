@@ -140,8 +140,9 @@ class SearchView(context: Context, attrs: AttributeSet) : FrameLayout(context, a
     private fun initCategoryList() {
         categoryAdapter = CategoryAdapter(context, CategoryAdapter.KEYWORDS)
         categoryAdapter!!.onClickItem = { name ->
-            editText.setText(name, TextView.BufferType.EDITABLE)
-            editText.setSelection(name.length, name.length)
+            val trimmedEmoji = name.substring(3, name.length)
+            editText.setText(trimmedEmoji, TextView.BufferType.EDITABLE)
+            editText.setSelection(trimmedEmoji.length, trimmedEmoji.length)
             onClickSearch()
         }
         categoryList.layoutManager = FlexboxLayoutManager(context)
