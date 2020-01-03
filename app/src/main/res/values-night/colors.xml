@@ -8,4 +8,6 @@
     <color name="MyerSplashThemeColor">#3ADBEF</color>
     <color name="rippleColor">#48FFFFFF</color>
     <color name="MaskColor">#cc000000</color>
+
+    <color name="overlay_image">#4D000000</color>
 </resources>

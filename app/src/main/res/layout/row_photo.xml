@@ -1,83 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.juniperphoton.myersplash.widget.item.PhotoItemView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/row_photo_root"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:layout_height="200dp"
-        android:clickable="true"
-        tools:background="@android:color/black">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/row_photo_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    tools:background="@android:color/black"
+    tools:layout_height="200dp">
 
     <View
-            android:id="@+id/row_photo_placeholder"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/primaryHalfBackgroundColor"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/row_photo_placeholder"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/primaryHalfBackgroundColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/row_photo_iv"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:clickable="true"
-            app:backgroundTint="@color/colorPrimaryDark"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="3:2"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/row_photo_iv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="true"
+        app:backgroundTint="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="3:2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:overlayImage="@color/overlay_image" />
 
     <FrameLayout
-            android:id="@+id/row_photo_ripple_mask_rl"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:clickable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        android:id="@+id/row_photo_ripple_mask_rl"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <FrameLayout
-                android:id="@+id/row_photo_download_rl"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_gravity="right|bottom"
-                android:background="?android:attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:visibility="visible">
+            android:id="@+id/row_photo_download_rl"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="right|bottom"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:visibility="visible">
 
             <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/image_desc"
-                    android:scaleType="fitXY"
-                    app:tint="@android:color/white"
-                    android:src="@drawable/vector_ic_file_download"
-                    android:visibility="visible" />
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/image_desc"
+                android:scaleType="fitXY"
+                android:src="@drawable/vector_ic_file_download"
+                android:visibility="visible"
+                app:tint="@android:color/white" />
 
         </FrameLayout>
 
         <TextView
-                android:id="@+id/row_photo_today_tag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|left"
-                android:drawableLeft="@drawable/ic_star_yellow"
-                android:drawablePadding="4dp"
-                android:gravity="center"
-                android:padding="17dp"
-                android:shadowColor="@color/ShadowColor"
-                android:shadowDx="0"
-                android:shadowDy="0"
-                android:shadowRadius="15"
-                android:text="@string/recommended_tag"
-                android:textColor="@android:color/white"
-                android:textStyle="bold" />
+            android:id="@+id/row_photo_today_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|left"
+            android:drawableLeft="@drawable/ic_star_yellow"
+            android:drawablePadding="4dp"
+            android:gravity="center"
+            android:padding="17dp"
+            android:shadowColor="@color/ShadowColor"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="15"
+            android:text="@string/recommended_tag"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
     </FrameLayout>
 </com.juniperphoton.myersplash.widget.item.PhotoItemView>

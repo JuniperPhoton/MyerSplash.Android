@@ -1,116 +1,116 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/detail_root_sv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/detail_root_sv"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/detail_img_rl"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-5dp"
-            android:clickable="true"
-            android:clipChildren="false"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        android:id="@+id/detail_img_rl"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-5dp"
+        android:clickable="true"
+        android:clipChildren="false"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/detail_backgrd_rl"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_alignParentBottom="true"
-                android:background="@android:color/white"
-                android:clickable="true"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent">
+            android:id="@+id/detail_backgrd_rl"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/white"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
 
             <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/detail_photo_by_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:text="@string/photo_by"
+                    android:textColor="@android:color/black"
+                    android:textSize="12dp" />
 
                 <TextView
-                        android:id="@+id/detail_photo_by_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/photo_by"
-                        android:textColor="@android:color/black"
-                        android:textSize="12dp" />
-
-                <TextView
-                        android:id="@+id/detail_name_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Juniper Photon"
-                        android:textColor="@android:color/black"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
+                    android:id="@+id/detail_name_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Juniper Photon"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
 
                 <View
-                        android:id="@+id/detail_name_line"
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:background="@android:color/black"
-                        tools:layout_editor_absoluteY="0dp" />
+                    android:id="@+id/detail_name_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@android:color/black"
+                    tools:layout_editor_absoluteY="0dp" />
             </LinearLayout>
 
             <com.juniperphoton.flipperlayout.FlipperLayout
-                    android:id="@+id/copy_url_flipper_layout"
-                    android:layout_width="@dimen/copy_url_width"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginRight="12dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_editor_absoluteX="0dp"
-                    tools:layout_editor_absoluteY="0dp">
+                android:id="@+id/copy_url_flipper_layout"
+                android:layout_width="@dimen/copy_url_width"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp">
 
                 <com.juniperphoton.myersplash.widget.RoundCardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <FrameLayout
-                            android:id="@+id/copy_url_fl"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:foreground="@drawable/ripple_large_round_rect">
+                        android:id="@+id/copy_url_fl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:foreground="@drawable/ripple_large_round_rect">
 
                         <TextView
-                                android:id="@+id/copy_url_tv"
-                                style="@style/CopyUrlTextViewStyle"
-                                android:text="@string/copy_url" />
+                            android:id="@+id/copy_url_tv"
+                            style="@style/CopyUrlTextViewStyle"
+                            android:text="@string/copy_url" />
                     </FrameLayout>
                 </com.juniperphoton.myersplash.widget.RoundCardView>
 
                 <com.juniperphoton.myersplash.widget.RoundCardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <FrameLayout
-                            android:id="@+id/copied_url_fl"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@android:color/white"
-                            android:foreground="@drawable/ripple_large_round_rect">
+                        android:id="@+id/copied_url_fl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/white"
+                        android:foreground="@drawable/ripple_large_round_rect">
 
                         <TextView
-                                android:id="@+id/copied_url_tv"
-                                style="@style/CopyUrlTextViewStyle"
-                                android:text="@string/copied_tag" />
+                            android:id="@+id/copied_url_tv"
+                            style="@style/CopyUrlTextViewStyle"
+                            android:text="@string/copied_tag" />
                     </FrameLayout>
                 </com.juniperphoton.myersplash.widget.RoundCardView>
             </com.juniperphoton.flipperlayout.FlipperLayout>
@@ -118,80 +118,81 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.facebook.drawee.view.SimpleDraweeView
-                android:id="@+id/detail_hero_view"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:clickable="true"
-                app:layout_constraintBottom_toTopOf="@id/detail_backgrd_rl"
-                app:layout_constraintDimensionRatio="3:2"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@color/colorPrimary" />
+            android:id="@+id/detail_hero_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clickable="true"
+            app:layout_constraintBottom_toTopOf="@id/detail_backgrd_rl"
+            app:layout_constraintDimensionRatio="3:2"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:overlayImage="@color/overlay_image"
+            tools:src="@color/colorPrimary" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/detail_share_fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginEnd="8dp"
-                android:clickable="true"
-                android:src="@drawable/vector_ic_share"
-                app:tint="#FFD93A58"
-                app:backgroundTint="@android:color/white"
-                app:fabSize="mini"
-                app:layout_constraintBottom_toBottomOf="@+id/download_flipper_layout"
-                app:layout_constraintRight_toLeftOf="@+id/download_flipper_layout"
-                app:layout_constraintTop_toTopOf="@+id/download_flipper_layout" />
+            android:id="@+id/detail_share_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="8dp"
+            android:clickable="true"
+            android:src="@drawable/vector_ic_share"
+            app:backgroundTint="@android:color/white"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toBottomOf="@+id/download_flipper_layout"
+            app:layout_constraintRight_toLeftOf="@+id/download_flipper_layout"
+            app:layout_constraintTop_toTopOf="@+id/download_flipper_layout"
+            app:tint="#FFD93A58" />
 
         <com.juniperphoton.flipperlayout.FlipperLayout
-                android:id="@+id/download_flipper_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="12dp"
-                android:layout_marginRight="12dp"
-                android:layout_marginBottom="75dp"
-                app:defaultIndex="0"
-                app:layout_constraintBottom_toBottomOf="@+id/detail_backgrd_rl"
-                app:layout_constraintRight_toRightOf="parent"
-                app:tapToFlip="false">
+            android:id="@+id/download_flipper_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginBottom="75dp"
+            app:defaultIndex="0"
+            app:layout_constraintBottom_toBottomOf="@+id/detail_backgrd_rl"
+            app:layout_constraintRight_toRightOf="parent"
+            app:tapToFlip="false">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/detail_download_fab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/vector_ic_file_download"
-                    app:tint="@android:color/white"
-                    app:backgroundTint="@color/MyerSplashThemeColor"
-                    app:fabSize="normal" />
+                android:id="@+id/detail_download_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/vector_ic_file_download"
+                app:backgroundTint="@color/MyerSplashThemeColor"
+                app:fabSize="normal"
+                app:tint="@android:color/white" />
 
             <FrameLayout
-                    android:layout_width="@dimen/flipper_fab_size"
-                    android:layout_height="@dimen/flipper_fab_size">
+                android:layout_width="@dimen/flipper_fab_size"
+                android:layout_height="@dimen/flipper_fab_size">
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/detail_cancel_download_fab"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_clear"
-                        app:tint="@android:color/white"
-                        app:backgroundTint="@color/MyerSplashLikedHeartColor"
-                        app:fabSize="normal" />
+                    android:id="@+id/detail_cancel_download_fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_clear"
+                    app:backgroundTint="@color/MyerSplashLikedHeartColor"
+                    app:fabSize="normal"
+                    app:tint="@android:color/white" />
 
                 <com.juniperphoton.myersplash.widget.RingProgressView
-                        android:id="@+id/detail_progress_ring"
-                        style="@style/DefaultRingProgress" />
+                    android:id="@+id/detail_progress_ring"
+                    style="@style/DefaultRingProgress" />
 
             </FrameLayout>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/detail_set_as_fab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_panorama_horizontal_white"
-                    app:backgroundTint="@color/SettingBackground"
-                    app:tint="@android:color/white"
-                    app:fabSize="normal" />
+                android:id="@+id/detail_set_as_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_panorama_horizontal_white"
+                app:backgroundTint="@color/SettingBackground"
+                app:fabSize="normal"
+                app:tint="@android:color/white" />
 
         </com.juniperphoton.flipperlayout.FlipperLayout>
 

@@ -24,4 +24,6 @@
     <color name="ShadowColor">#2f000000</color>
     <color name="highlightFallbackColor0">#9c9c9c</color>
     <color name="highlightFallbackColor1">#525252</color>
+
+    <color name="overlay_image">#00FFFFFF</color>
 </resources>
