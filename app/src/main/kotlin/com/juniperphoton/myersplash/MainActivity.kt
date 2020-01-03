@@ -303,6 +303,7 @@ class MainActivity : BaseActivity() {
         if (imageDetailView.tryHide()) {
             return
         }
-        super.onBackPressed()
+
+        moveTaskToBack(true)
     }
 }
