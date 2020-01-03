@@ -26,6 +26,8 @@ class App : Application() {
         val config = OkHttpImagePipelineConfigFactory
                 .newBuilder(this, OkHttpClientAPI.createClient()).build()
         Fresco.initialize(this, config)
+
+        AppCenter.setEnabled(!BuildConfig.DEBUG)
         AppCenter.start(this, BuildConfig.APP_CENTER_KEY, Analytics::class.java, Crashes::class.java)
     }
 }

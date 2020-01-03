@@ -29,6 +29,10 @@ abstract class ImageRepo {
     val images: LiveData<List<UnsplashImage>>
         get() = _images
 
+    fun onRestore(images: List<UnsplashImage>) {
+        _images.value = images
+    }
+
     suspend fun refresh() {
         Pasteur.i(TAG) {
             "start refresh: $this"

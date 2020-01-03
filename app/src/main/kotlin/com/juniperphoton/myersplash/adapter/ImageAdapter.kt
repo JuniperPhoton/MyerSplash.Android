@@ -23,7 +23,7 @@ class ImageAdapter(
         private val context: Context
 ) : RecyclerView.Adapter<ImageAdapter.PhotoViewHolder>() {
     companion object {
-        private const val TAG = "PhotoAdapter"
+        private const val TAG = "ImageAdapter"
 
         const val ITEM_TYPE_ITEM = 0
         const val ITEM_TYPE_FOOTER = 1
@@ -64,6 +64,8 @@ class ImageAdapter(
             val imgHeight = recyclerView!!.resources.getDimensionPixelSize(R.dimen.img_height)
             return ceil(height.toDouble() / imgHeight.toDouble()).toInt()
         }
+
+    private var animateOnBind = true
 
     init {
         setHasStableIds(true)
@@ -118,6 +120,8 @@ class ImageAdapter(
             return
         }
 
+        if (!animateOnBind) return
+
         lastPosition = position
 
         val delay = BASE_DELAY_MILLIS * (position + 1)
@@ -163,10 +167,12 @@ class ImageAdapter(
         footerView?.toggleCollapsed()
     }
 
-    fun refresh(list: List<UnsplashImage>) {
+    fun refresh(list: List<UnsplashImage>, animated: Boolean = true) {
         Pasteur.i(TAG) {
             "refresh with new list: ${list.size}"
         }
+
+        animateOnBind = animated
 
         data.clear()
         setLoadMoreData(list)

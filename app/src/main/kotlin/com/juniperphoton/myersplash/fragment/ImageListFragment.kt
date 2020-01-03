@@ -50,6 +50,8 @@ class ImageListFragment : Fragment() {
     private var query: String? = null
     private var type: Int = -1
 
+    private var fromRestore = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -88,7 +90,14 @@ class ImageListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        fromRestore = savedInstanceState != null
+
         viewModel.apply {
+            val restored = init()
+            if (!restored) {
+                refresh()
+            }
+
             images.observe(this@ImageListFragment, Observer { images ->
                 images ?: return@Observer
 
@@ -96,12 +105,19 @@ class ImageListFragment : Fragment() {
                     "refresh, $this"
                 }
 
-                adapter?.refresh(images)
+                adapter?.refresh(images, !fromRestore)
+                fromRestore = false
             })
 
             refreshing.observe(this@ImageListFragment, Observer { e ->
                 e?.consume {
                     refreshLayout.isRefreshing = it
+                }
+            })
+
+            refreshingWithNoData.observe(this@ImageListFragment, Observer { e ->
+                e?.consume {
+                    contentProgressBar.setVisible(it)
                 }
             })
 
@@ -118,8 +134,6 @@ class ImageListFragment : Fragment() {
                     Toaster.sendShortToast(R.string.failed_to_send_request)
                 }
             })
-
-            refresh()
         }
 
         sharedViewModel.apply {
@@ -146,6 +160,10 @@ class ImageListFragment : Fragment() {
             }
             onClickPhoto = { r, i, v ->
                 sharedViewModel.onClickedImage.value = ClickData(r, i, v).liveDataEvent
+            }
+
+            viewModel.images.value?.let {
+                refresh(it)
             }
         }
 
