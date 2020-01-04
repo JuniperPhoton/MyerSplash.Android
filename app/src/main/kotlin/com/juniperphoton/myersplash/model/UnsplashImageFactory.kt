@@ -56,7 +56,7 @@ object UnsplashImageFactory {
             this.showTodayTag = showTodayTag
             color = if (dateFormat.format(date).toInt() % 2 == 0) fallbackColor0 else fallbackColor1
             id = createDateString(date)
-            urls = ImageUrl().apply {
+            urls = UnsplashImageUrl().apply {
                 val fullUrl = createFullDownloadUrl(date)
                 val thumbUrl = createThumbDownloadUrl(date)
                 raw = fullUrl
@@ -71,7 +71,7 @@ object UnsplashImageFactory {
                 val authorName = App.instance.getString(R.string.author_default_name)
                 userName = authorName
                 name = authorName
-                links = ProfileUrl().apply {
+                links = UnsplashProfileUrl().apply {
                     html = Request.ME_HOME_PAGE
                 }
             }

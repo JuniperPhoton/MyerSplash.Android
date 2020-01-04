@@ -1,7 +1,7 @@
 package com.juniperphoton.myersplash.api
 
 import com.juniperphoton.myersplash.api.CloudService.DEFAULT_REQUEST_COUNT
-import com.juniperphoton.myersplash.model.SearchResult
+import com.juniperphoton.myersplash.model.UnsplashSearchResult
 import com.juniperphoton.myersplash.model.UnsplashImage
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -29,5 +29,5 @@ interface PhotoService {
             @Query("query") query: String,
             @Query("page") page: Int,
             @Query("per_page") per_page: Int = DEFAULT_REQUEST_COUNT
-    ): SearchResult
+    ): UnsplashSearchResult
 }

@@ -2,7 +2,7 @@ package com.juniperphoton.myersplash.model
 
 import com.google.gson.annotations.SerializedName
 
-class SearchResult {
+class UnsplashSearchResult {
     @SerializedName("results")
     val list: MutableList<UnsplashImage>? = null
 }

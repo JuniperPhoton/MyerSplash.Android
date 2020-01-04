@@ -104,7 +104,7 @@ class DownloadsListAdapter(private val context: Context) :
             }
         }
 
-        internal fun bind(item: DownloadItem) {
+        fun bind(item: DownloadItem) {
             if (this.downloadItem == item) {
                 return
             }

@@ -5,10 +5,9 @@ import com.google.gson.annotations.SerializedName
 import com.juniperphoton.myersplash.App
 import com.juniperphoton.myersplash.R
 import com.juniperphoton.myersplash.utils.LocalSettingHelper
-import java.io.Serializable
 
 @Suppress("unused")
-class UnsplashImage : Serializable {
+class UnsplashImage {
     companion object {
         private val savingQualitySettingsKey = App.instance.getString(R.string.preference_key_saving_quality)
         private val listQualitySettingsKey = App.instance.getString(R.string.preference_key_list_quality)
@@ -16,7 +15,6 @@ class UnsplashImage : Serializable {
 
     @SerializedName("id")
     var id: String? = null
-        internal set
 
     @SerializedName("created_at")
     private val createdAt: String? = null
@@ -28,13 +26,13 @@ class UnsplashImage : Serializable {
     private val likes: Int = 0
 
     @SerializedName("user")
-    internal var user: UnsplashUser? = null
+    var user: UnsplashUser? = null
 
     @SerializedName("urls")
-    internal var urls: ImageUrl? = null
+    var urls: UnsplashImageUrl? = null
 
     @SerializedName("links")
-    private var links: ImageLinks? = null
+    private val links: UnsplashImageLinks? = null
 
     @SerializedName("width")
     var width = 0
@@ -46,10 +44,8 @@ class UnsplashImage : Serializable {
         get() = links?.downloadLocation
 
     var isUnsplash: Boolean = true
-        internal set
 
     var showTodayTag: Boolean = false
-        internal set
 
     val fileNameForDownload: String
         get() = "${user!!.name} - $id - $tagForDownloadUrl"
@@ -100,12 +96,12 @@ class UnsplashImage : Serializable {
         }
 }
 
-class ImageLinks : Serializable {
+class UnsplashImageLinks {
     @SerializedName("download_location")
     var downloadLocation: String? = null
 }
 
-class ImageUrl : Serializable {
+class UnsplashImageUrl {
     @SerializedName("raw")
     var raw: String? = null
 

@@ -2,10 +2,8 @@ package com.juniperphoton.myersplash.model
 
 import com.google.gson.annotations.SerializedName
 
-import java.io.Serializable
-
 @Suppress("unused")
-class UnsplashUser : Serializable {
+class UnsplashUser {
     @SerializedName("id")
     var id: String? = null
 
@@ -16,14 +14,14 @@ class UnsplashUser : Serializable {
     var name: String? = null
 
     @SerializedName("links")
-    var links: ProfileUrl? = null
+    var links: UnsplashProfileUrl? = null
 
     val homeUrl: String?
         get() = links?.html
 }
 
 @Suppress("unused")
-class ProfileUrl : Serializable {
+class UnsplashProfileUrl {
     @SerializedName("self")
     val self: String? = null
 
