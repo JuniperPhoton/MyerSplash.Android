@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.juniperphoton.myersplash.R
@@ -13,8 +14,6 @@ import com.juniperphoton.myersplash.adapter.DownloadsListAdapter
 import com.juniperphoton.myersplash.di.AppComponent
 import com.juniperphoton.myersplash.extension.setVisible
 import com.juniperphoton.myersplash.model.DownloadItem
-import com.juniperphoton.myersplash.restore.restorePosition
-import com.juniperphoton.myersplash.restore.savePosition
 import com.juniperphoton.myersplash.service.DownloadService
 import com.juniperphoton.myersplash.utils.NotificationUtils
 import com.juniperphoton.myersplash.utils.Params
@@ -66,6 +65,7 @@ class DownloadsListActivity : BaseActivity(), DownloadsListAdapter.Callback, Cor
 
         adapter = DownloadsListAdapter(this@DownloadsListActivity)
         adapter.callback = this@DownloadsListActivity
+        adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
 
         val layoutManager = StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL)
 
@@ -82,8 +82,6 @@ class DownloadsListActivity : BaseActivity(), DownloadsListAdapter.Callback, Cor
             }
             adapter.refresh(items)
             updateNoItemVisibility()
-
-            recyclerView.restorePosition(savedInstanceState)
         })
 
         handleIntent(intent)
@@ -108,11 +106,6 @@ class DownloadsListActivity : BaseActivity(), DownloadsListAdapter.Callback, Cor
                 onClickMore()
             }
         }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        recyclerView.savePosition(outState)
-        super.onSaveInstanceState(outState)
     }
 
     private fun onClickMore() {
