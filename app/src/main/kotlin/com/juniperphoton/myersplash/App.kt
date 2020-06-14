@@ -9,7 +9,9 @@ import com.juniperphoton.myersplash.utils.ThemeHelper
 import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.analytics.Analytics
 import com.microsoft.appcenter.crashes.Crashes
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class App : Application() {
     companion object {
         lateinit var instance: App
@@ -20,6 +22,7 @@ class App : Application() {
         ThemeHelper.switchTheme(this)
 
         super.onCreate()
+
         instance = this
         Pasteur.init(BuildConfig.DEBUG)
 

@@ -35,7 +35,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.juniperphoton.flipperlayout.FlipperLayout
 import com.juniperphoton.myersplash.R
 import com.juniperphoton.myersplash.activity.EditActivity
-import com.juniperphoton.myersplash.di.AppComponent
 import com.juniperphoton.myersplash.extension.*
 import com.juniperphoton.myersplash.misc.Action
 import com.juniperphoton.myersplash.misc.guard
@@ -47,14 +46,17 @@ import com.juniperphoton.myersplash.utils.*
 import com.juniperphoton.myersplash.viewmodel.AppViewModelProviders
 import com.juniperphoton.myersplash.viewmodel.ClickData
 import com.juniperphoton.myersplash.viewmodel.ImageDetailViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.*
 import java.io.File
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 import kotlin.math.abs
 
+@AndroidEntryPoint
 @Suppress("unused")
 class ImageDetailView(context: Context, attrs: AttributeSet
 ) : FrameLayout(context, attrs) {
@@ -174,6 +176,9 @@ class ImageDetailView(context: Context, attrs: AttributeSet
     private var startY: Float = 0f
 
     private var pointerDown: Boolean = false
+
+    @Inject
+    lateinit var analysisHelper: AnalysisHelper
 
     init {
         LayoutInflater.from(context).inflate(R.layout.detail_content, this, true)
@@ -592,7 +597,7 @@ class ImageDetailView(context: Context, attrs: AttributeSet
 
         copyUrlFlipperLayout.next()
 
-        AppComponent.instance.analysisHelper.logClickCopyUrl()
+        analysisHelper.logClickCopyUrl()
 
         viewModel.copyUrlToClipboard()
         delay(URL_COPIED_DELAY_MILLIS)
@@ -709,7 +714,7 @@ class ImageDetailView(context: Context, attrs: AttributeSet
 
         val (rectF, unsplashImage, itemView) = clickData
 
-        AppComponent.instance.analysisHelper.logToggleImageDetails()
+        analysisHelper.logToggleImageDetails()
 
         if (clickedView != null) {
             return

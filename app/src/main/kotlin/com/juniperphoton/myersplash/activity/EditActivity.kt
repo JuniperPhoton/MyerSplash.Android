@@ -22,10 +22,10 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder
 import com.juniperphoton.flipperlayout.FlipperLayout
 import com.juniperphoton.myersplash.App
 import com.juniperphoton.myersplash.R
-import com.juniperphoton.myersplash.di.AppComponent
 import com.juniperphoton.myersplash.extension.getScreenHeight
 import com.juniperphoton.myersplash.extension.updateIndex
 import com.juniperphoton.myersplash.utils.*
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -33,8 +33,10 @@ import kotlinx.android.synthetic.main.activity_edit.*
 import java.io.File
 import java.io.FileOutputStream
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 import kotlin.math.max
 
+@AndroidEntryPoint
 class EditActivity : BaseActivity() {
     companion object {
         private const val TAG = "EditActivity"
@@ -48,6 +50,9 @@ class EditActivity : BaseActivity() {
             field = value
             homePreview.alpha = if (value) 1f else 0f
         }
+
+    @Inject
+    lateinit var analysisHelper: AnalysisHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,13 +102,13 @@ class EditActivity : BaseActivity() {
     }
 
     private fun onClickConfirm() {
-        AppComponent.instance.analysisHelper.logApplyEdit(brightnessSeekBar.progress > 0)
+        analysisHelper.logApplyEdit(brightnessSeekBar.progress > 0)
         composeMask()
     }
 
     private fun onClickPreview() {
         if (!showingPreview) {
-            AppComponent.instance.analysisHelper.logEditShowPreview()
+            analysisHelper.logEditShowPreview()
         }
         showingPreview = !showingPreview
     }

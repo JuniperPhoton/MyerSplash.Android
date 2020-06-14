@@ -21,19 +21,22 @@ import com.juniperphoton.myersplash.activity.BaseActivity
 import com.juniperphoton.myersplash.activity.DownloadsListActivity
 import com.juniperphoton.myersplash.activity.SettingsActivity
 import com.juniperphoton.myersplash.adapter.MainAdapter
-import com.juniperphoton.myersplash.di.AppComponent
 import com.juniperphoton.myersplash.extension.pow
 import com.juniperphoton.myersplash.extension.startServiceSafely
 import com.juniperphoton.myersplash.service.DownloadService
+import com.juniperphoton.myersplash.utils.AnalysisHelper
 import com.juniperphoton.myersplash.utils.Params
 import com.juniperphoton.myersplash.utils.Pasteur
 import com.juniperphoton.myersplash.utils.PermissionUtils
 import com.juniperphoton.myersplash.viewmodel.AppViewModelProviders
 import com.juniperphoton.myersplash.viewmodel.ImageSharedViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 import kotlin.math.abs
 import kotlin.math.sqrt
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity() {
     companion object {
         private const val TAG = "MainActivity"
@@ -50,6 +53,9 @@ class MainActivity : BaseActivity() {
                 R.id.menu_about to AboutActivity::class.java
         )
     }
+
+    @Inject
+    lateinit var analysisHelper: AnalysisHelper
 
     private var mainAdapter: MainAdapter? = null
 
@@ -141,7 +147,7 @@ class MainActivity : BaseActivity() {
         if (show) {
             searchFab.hide()
         } else {
-            AppComponent.instance.analysisHelper.logEnterSearch()
+            analysisHelper.logEnterSearch()
             searchFab.show()
         }
 
@@ -216,7 +222,7 @@ class MainActivity : BaseActivity() {
                     val text = tabLayout.getTabAt(position)?.text
                     val title = "# $text"
                     tagView.text = title
-                    AppComponent.instance.analysisHelper.logTabSelected(title)
+                    analysisHelper.logTabSelected(title)
                 }
 
                 override fun onPageScrollStateChanged(state: Int) = Unit

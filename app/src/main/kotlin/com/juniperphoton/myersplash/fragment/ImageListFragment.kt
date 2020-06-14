@@ -24,10 +24,13 @@ import com.juniperphoton.myersplash.viewmodel.AppViewModelProviders
 import com.juniperphoton.myersplash.viewmodel.ImageListViewModel
 import com.juniperphoton.myersplash.viewmodel.ImageSharedViewModel
 import com.juniperphoton.myersplash.viewmodel.SearchImageViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.detail_no_item.*
 import kotlinx.android.synthetic.main.fragment_list.*
+import javax.inject.Inject
 
 @Suppress("unused", "unused_parameter")
+@AndroidEntryPoint
 class ImageListFragment : Fragment() {
     companion object {
         private const val TAG = "ImageListFragment"
@@ -54,6 +57,9 @@ class ImageListFragment : Fragment() {
     private var type: Int = -1
 
     private var fromRestore = false
+
+    @Inject
+    lateinit var analysisHelper: AnalysisHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,7 +107,7 @@ class ImageListFragment : Fragment() {
                 refresh()
             }
 
-            images.observe(this@ImageListFragment, Observer { images ->
+            images.observe(viewLifecycleOwner, Observer { images ->
                 images ?: return@Observer
 
                 Pasteur.info(TAG) {
@@ -112,25 +118,25 @@ class ImageListFragment : Fragment() {
                 fromRestore = false
             })
 
-            refreshing.observe(this@ImageListFragment, Observer { e ->
+            refreshing.observe(viewLifecycleOwner, Observer { e ->
                 e?.consume {
                     refreshLayout.isRefreshing = it
                 }
             })
 
-            refreshingWithNoData.observe(this@ImageListFragment, Observer { e ->
+            refreshingWithNoData.observe(viewLifecycleOwner, Observer { e ->
                 e?.consume {
                     contentProgressBar.setVisible(it)
                 }
             })
 
-            showError.observe(this@ImageListFragment, Observer { e ->
+            showError.observe(viewLifecycleOwner, Observer { e ->
                 e?.consume {
                     updateNoItemVisibility(it)
                 }
             })
 
-            showLoadingMoreError.observe(this@ImageListFragment, Observer { e ->
+            showLoadingMoreError.observe(viewLifecycleOwner, Observer { e ->
                 e?.consume {
                     updateNoItemVisibility(false)
                     adapter?.indicateLoadMoreError()
@@ -140,14 +146,14 @@ class ImageListFragment : Fragment() {
         }
 
         sharedViewModel.apply {
-            onRequestRefresh.observe(this@ImageListFragment, Observer { e ->
+            onRequestRefresh.observe(viewLifecycleOwner, Observer { e ->
                 e?.consume {
                     if (it == type) {
                         viewModel.refresh()
                     }
                 }
             })
-            onRequestScrollToTop.observe(this@ImageListFragment, Observer { e ->
+            onRequestScrollToTop.observe(viewLifecycleOwner, Observer { e ->
                 e?.consume {
                     if (it == type) {
                         scrollToTop()
@@ -158,7 +164,7 @@ class ImageListFragment : Fragment() {
 
         adapter = ImageAdapter(view.context).apply {
             onClickQuickDownload = { image ->
-                AppComponent.instance.analysisHelper.logClickDownloadInList()
+                analysisHelper.logClickDownloadInList()
                 download(image)
             }
 
@@ -183,7 +189,7 @@ class ImageListFragment : Fragment() {
         }
 
         refreshLayout.setOnRefreshListener {
-            AppComponent.instance.analysisHelper.logRefreshList()
+            analysisHelper.logRefreshList()
             viewModel.refresh()
         }
 

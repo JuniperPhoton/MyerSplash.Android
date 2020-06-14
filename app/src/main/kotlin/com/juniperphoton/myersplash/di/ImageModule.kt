@@ -5,9 +5,11 @@ import com.juniperphoton.myersplash.model.UnsplashCategory
 import com.juniperphoton.myersplash.repo.*
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.migration.DisableInstallInCheck
 import javax.inject.Named
 
 @Module(includes = [AppModule::class])
+@DisableInstallInCheck
 class ImageModule {
     @ImageScope
     @Provides

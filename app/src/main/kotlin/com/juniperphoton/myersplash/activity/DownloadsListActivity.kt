@@ -10,22 +10,25 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.juniperphoton.myersplash.R
 import com.juniperphoton.myersplash.adapter.DownloadsListAdapter
-import com.juniperphoton.myersplash.di.AppComponent
 import com.juniperphoton.myersplash.extension.setVisible
 import com.juniperphoton.myersplash.model.DownloadItem
 import com.juniperphoton.myersplash.restore.restorePosition
 import com.juniperphoton.myersplash.restore.savePosition
 import com.juniperphoton.myersplash.service.DownloadService
+import com.juniperphoton.myersplash.utils.AnalysisHelper
 import com.juniperphoton.myersplash.utils.NotificationUtils
 import com.juniperphoton.myersplash.utils.Params
 import com.juniperphoton.myersplash.utils.Pasteur
 import com.juniperphoton.myersplash.viewmodel.AppViewModelProviders
 import com.juniperphoton.myersplash.viewmodel.DownloadListViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_manage_download.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
+import javax.inject.Inject
 
 @Suppress("unused")
+@AndroidEntryPoint
 class DownloadsListActivity : BaseActivity(), DownloadsListAdapter.Callback, CoroutineScope by MainScope() {
     companion object {
         private const val TAG = "DownloadsListActivity"
@@ -36,6 +39,9 @@ class DownloadsListActivity : BaseActivity(), DownloadsListAdapter.Callback, Cor
 
     private lateinit var adapter: DownloadsListAdapter
     private lateinit var viewModel: DownloadListViewModel
+
+    @Inject
+    lateinit var analysisHelper: AnalysisHelper
 
     private val spanCount: Int
         get() {
@@ -60,7 +66,7 @@ class DownloadsListActivity : BaseActivity(), DownloadsListAdapter.Callback, Cor
 
         viewModel = AppViewModelProviders.of(this).get(DownloadListViewModel::class.java)
 
-        AppComponent.instance.analysisHelper.logEnterDownloads()
+        analysisHelper.logEnterDownloads()
 
         moreFab.setOnClickListener(this)
 
@@ -116,7 +122,7 @@ class DownloadsListActivity : BaseActivity(), DownloadsListAdapter.Callback, Cor
     }
 
     private fun onClickMore() {
-        AppComponent.instance.analysisHelper.logClickMoreButtonInDownloadList()
+        analysisHelper.logClickMoreButtonInDownloadList()
 
         AlertDialog.Builder(this).setTitle(R.string.clear_options_title)
                 .setItems(R.array.delete_options) { _, i ->

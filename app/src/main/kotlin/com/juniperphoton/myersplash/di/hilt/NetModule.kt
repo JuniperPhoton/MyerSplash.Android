@@ -1,17 +1,18 @@
-package com.juniperphoton.myersplash.di
+package com.juniperphoton.myersplash.di.hilt
 
 import com.juniperphoton.myersplash.api.CloudService
 import com.juniperphoton.myersplash.api.IOService
 import com.juniperphoton.myersplash.api.PhotoService
-import com.juniperphoton.myersplash.di.hilt.AnalysisModule
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.migration.DisableInstallInCheck
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
 import javax.inject.Singleton
 
-@Module(includes = [AnalysisModule::class])
-@DisableInstallInCheck
-class AppModule {
+@Module
+@InstallIn(ApplicationComponent::class)
+class NetModule {
+    @Singleton
     @Provides
     fun provideImageService(): PhotoService {
         return CloudService.createService()
