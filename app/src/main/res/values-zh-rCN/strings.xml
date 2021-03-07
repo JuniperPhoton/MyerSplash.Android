@@ -3,7 +3,7 @@
     <string name="app_name">MyerSplash</string>
     <string name="settings_title">设置</string>
     <string name="settings_credit_content">图片来自 Unsplash，一个无版权可免费商用的网站。“每日推荐” 里，有部分照片来自我自己的摄影作品 :P</string>
-    <string name="settings_saving_quality">保存质量</string>
+    <string name="settings_download_quality">保存质量</string>
     <string name="settings_loading_quality">浏览质量</string>
     <string name="settings_clean_up_cache">清理缓存</string>
     <string name="settings_quick_download">列表里显示下载按钮</string>
@@ -15,12 +15,12 @@
     <string name="settings_theme_system">跟随系统</string>
     <string name="settings_theme">主题</string>
     <string name="image_desc">图片</string>
-    <string name="settings_saving_highest">原图</string>
-    <string name="settings_saving_high">高（默认）</string>
-    <string name="settings_saving_medium">中（不推荐）</string>
-    <string name="settings_loading_large">高（推荐）</string>
-    <string name="settings_loading_small">低</string>
-    <string name="settings_loading_thumb">非常低</string>
+    <string name="settings_download_highest">原图</string>
+    <string name="settings_download_high">高（默认）</string>
+    <string name="settings_download_medium">中（不推荐）</string>
+    <string name="settings_browsing_large">高（推荐）</string>
+    <string name="settings_browsing_small">低</string>
+    <string name="settings_browsing_thumb">非常低</string>
     <string name="feedback_str">我有个建议</string>
     <string name="credit">鸣谢</string>
     <string name="feedback">反馈</string>

@@ -4,6 +4,6 @@
     <string name="preference_key_download_via_metered_network" translatable="false">DOWNLOAD_METERED_WARN</string>
     <string name="preference_key_show_sponsorship" translatable="false">SHOW_SPONSORSHIP</string>
     <string name="preference_key_theme" translatable="false">THEME</string>
-    <string name="preference_key_saving_quality" translatable="false">SAVING_QUALITY_CONFIG</string>
-    <string name="preference_key_list_quality" translatable="false">LOADING_QUALITY_CONFIG</string>
+    <string name="preference_key_download_quality" translatable="false">SAVING_QUALITY_CONFIG</string>
+    <string name="preference_key_browsing_quality" translatable="false">LOADING_QUALITY_CONFIG</string>
 </resources>

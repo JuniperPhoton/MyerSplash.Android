@@ -16,8 +16,8 @@ import com.google.android.material.appbar.AppBarLayout
 import com.juniperphoton.myersplash.activity.AboutActivity
 import com.juniperphoton.myersplash.activity.BaseActivity
 import com.juniperphoton.myersplash.activity.DownloadsListActivity
-import com.juniperphoton.myersplash.activity.SettingsActivity
 import com.juniperphoton.myersplash.adapter.MainAdapter
+import com.juniperphoton.myersplash.compose.SettingsComposeActivity
 import com.juniperphoton.myersplash.di.AppComponent
 import com.juniperphoton.myersplash.extension.pow
 import com.juniperphoton.myersplash.extension.startServiceSafely
@@ -40,7 +40,7 @@ class MainActivity : BaseActivity() {
         private const val SAVED_NAVIGATION_INDEX = "navigation_index"
 
         private val menuMap: Map<Int, Class<out Any>> = mapOf(
-            R.id.menu_settings to SettingsActivity::class.java,
+            R.id.menu_settings to SettingsComposeActivity::class.java,
             R.id.menu_downloads to DownloadsListActivity::class.java,
             R.id.menu_about to AboutActivity::class.java
         )

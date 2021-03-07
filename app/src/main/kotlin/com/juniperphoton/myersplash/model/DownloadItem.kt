@@ -1,6 +1,7 @@
 package com.juniperphoton.myersplash.model
 
 import androidx.annotation.IntDef
+import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
@@ -29,6 +30,7 @@ open class DownloadItem() {
 
     @PrimaryKey
     @ColumnInfo(name = "id")
+    @field:NonNull
     lateinit var id: String
 
     @ColumnInfo(name = "progress")

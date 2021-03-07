@@ -2,10 +2,20 @@ package com.juniperphoton.myersplash.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.juniperphoton.myersplash.App
+import com.juniperphoton.myersplash.R
 
 @Suppress("unused")
 object LocalSettingHelper {
     private const val CONFIG_NAME = "config"
+
+    const val DEFAULT_THEME = 2
+    const val DEFAULT_SAVING_QUALITY = 1
+    const val DEFAULT_BROWSING_QUALITY = 0
+
+    val KEY_THEME = App.instance.getString(R.string.preference_key_theme)
+    val KEY_DOWNLOAD_QUALITY = App.instance.getString(R.string.preference_key_download_quality)
+    val KEY_BROWSING_QUALITY = App.instance.getString(R.string.preference_key_browsing_quality)
 
     private fun getSharedPreference(context: Context): SharedPreferences {
         return context.getSharedPreferences(CONFIG_NAME, Context.MODE_PRIVATE)

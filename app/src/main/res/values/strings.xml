@@ -5,7 +5,7 @@
     <string name="appbar_scrolling_view_behavior" translatable="false">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
 
     <string name="settings_credit_content">Photos are from Unsplash, an amazing website providing free high-resolution photos.</string>
-    <string name="settings_saving_quality">Download Quality</string>
+    <string name="settings_download_quality">Download Quality</string>
     <string name="settings_loading_quality">Browsing Quality</string>
     <string name="settings_clean_up_cache">Clean up cache</string>
 
@@ -22,17 +22,17 @@
 
     <string name="image_desc">Desc</string>
 
-    <string name="settings_saving_highest">Raw</string>
-    <string name="settings_saving_high">High (Default)</string>
-    <string name="settings_saving_medium">Medium (Not recommended)</string>
+    <string name="settings_download_highest">Raw</string>
+    <string name="settings_download_high">High (Default)</string>
+    <string name="settings_download_medium">Medium (Not recommended)</string>
 
     <string name="settings_theme_dark">Dark</string>
     <string name="settings_theme_light">Light</string>
     <string name="settings_theme_system">Follow System</string>
 
-    <string name="settings_loading_large">Large (Recommended)</string>
-    <string name="settings_loading_small">Small</string>
-    <string name="settings_loading_thumb">Thumbnail</string>
+    <string name="settings_browsing_large">Large (Recommended)</string>
+    <string name="settings_browsing_small">Small</string>
+    <string name="settings_browsing_thumb">Thumbnail</string>
 
     <string name="feedback_str">I have an idea</string>
     <string name="credit">CREDIT</string>

@@ -19,7 +19,7 @@
         <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="50dp">
+                android:layout_marginTop="@dimen/common_title_bar_height">
 
             <LinearLayout
                     android:layout_width="match_parent"
@@ -28,10 +28,10 @@
                     android:orientation="vertical">
 
                 <TextView
-                        style="@style/SettingsSubTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/personalization" />
+                    style="@style/SettingsSubTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/personalization" />
 
                 <com.juniperphoton.myersplash.widget.SettingsItemLayout
                         android:id="@+id/metered_settings"
@@ -70,14 +70,14 @@
                         android:id="@+id/savingQualitySettings"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:setting_content="@string/settings_saving_high"
-                        app:setting_title="@string/settings_saving_quality" />
+                        app:setting_content="@string/settings_download_high"
+                        app:setting_title="@string/settings_download_quality" />
 
                 <com.juniperphoton.myersplash.widget.SettingsItemLayout
                         android:id="@+id/loadingQualitySettings"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:setting_content="@string/settings_loading_large"
+                        app:setting_content="@string/settings_browsing_large"
                         app:setting_title="@string/settings_loading_quality"
                         app:show_divider="false" />
 

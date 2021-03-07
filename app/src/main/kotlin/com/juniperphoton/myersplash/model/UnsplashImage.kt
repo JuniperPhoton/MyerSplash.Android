@@ -11,8 +11,8 @@ import com.juniperphoton.myersplash.utils.LocalSettingHelper
 @Suppress("unused")
 class UnsplashImage {
     companion object {
-        private val savingQualitySettingsKey = App.instance.getString(R.string.preference_key_saving_quality)
-        private val listQualitySettingsKey = App.instance.getString(R.string.preference_key_list_quality)
+        private val savingQualitySettingsKey = App.instance.getString(R.string.preference_key_download_quality)
+        private val listQualitySettingsKey = App.instance.getString(R.string.preference_key_browsing_quality)
     }
 
     @SerializedName("id")

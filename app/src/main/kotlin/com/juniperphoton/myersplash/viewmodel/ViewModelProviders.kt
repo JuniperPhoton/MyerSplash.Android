@@ -5,20 +5,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.juniperphoton.myersplash.App
 
 object AppViewModelProviders {
     fun of(fragment: Fragment): ViewModelProvider {
-        return ViewModelProviders.of(fragment, VMFactory.instance)
+        return ViewModelProvider(fragment, VMFactory.instance)
     }
 
     fun of(activity: FragmentActivity): ViewModelProvider {
-        return ViewModelProviders.of(activity, VMFactory.instance)
+        return ViewModelProvider(activity, VMFactory.instance)
     }
 }
 
-private class VMFactory(application: Application
+private class VMFactory(
+    application: Application
 ) : ViewModelProvider.AndroidViewModelFactory(application) {
     companion object {
         val instance: VMFactory by lazy {

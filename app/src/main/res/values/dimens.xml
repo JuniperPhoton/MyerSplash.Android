@@ -56,4 +56,5 @@
     <dimen name="dim_margin_bottom">36dp</dimen>
     <dimen name="progress_bar_size">40dp</dimen>
     <dimen name="progress_bar_offsetY">-100dp</dimen>
+    <dimen name="common_title_bar_height">60dp</dimen>
 </resources>

@@ -17,10 +17,11 @@ class App : Application() {
     }
 
     override fun onCreate() {
+        instance = this
         ThemeHelper.switchTheme(this)
 
         super.onCreate()
-        instance = this
+
         Pasteur.init(BuildConfig.DEBUG)
 
         val config = OkHttpImagePipelineConfigFactory
