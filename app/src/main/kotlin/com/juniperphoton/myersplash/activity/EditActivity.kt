@@ -282,7 +282,7 @@ class EditActivity : BaseActivity() {
         fileUri ?: return null
 
         val inputStream = contentResolver.openInputStream(fileUri)
-        var bm: Bitmap? = null
+        var bm: Bitmap?
         inputStream.use {
             bm = BitmapFactory.decodeStream(inputStream, null, opt)
         }

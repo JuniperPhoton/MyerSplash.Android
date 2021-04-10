@@ -65,7 +65,7 @@ class ImageListFragment : Fragment() {
 
         query = arguments?.getString(EXTRA_QUERY)
 
-        sharedViewModel = AppViewModelProviders.of(activity!!).get(ImageSharedViewModel::class.java)
+        sharedViewModel = AppViewModelProviders.of(requireActivity()).get(ImageSharedViewModel::class.java)
 
         viewModel = if (type == UnsplashCategory.SEARCH_ID) {
             AppViewModelProviders.of(this).get(SearchImageViewModel::class.java)
@@ -84,7 +84,7 @@ class ImageListFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = LayoutInflater.from(activity!!).inflate(R.layout.fragment_list, container, false)
+        val view = LayoutInflater.from(requireActivity()).inflate(R.layout.fragment_list, container, false)
         ButterKnife.bind(this, view)
 
         return view
@@ -101,7 +101,7 @@ class ImageListFragment : Fragment() {
                 refresh()
             }
 
-            images.observe(this@ImageListFragment, Observer { images ->
+            images.observe(viewLifecycleOwner, Observer { images ->
                 images ?: return@Observer
 
                 Pasteur.info(TAG) {
@@ -112,25 +112,25 @@ class ImageListFragment : Fragment() {
                 fromRestore = false
             })
 
-            refreshing.observe(this@ImageListFragment, Observer { e ->
+            refreshing.observe(viewLifecycleOwner, { e ->
                 e?.consume {
                     refreshLayout.isRefreshing = it
                 }
             })
 
-            refreshingWithNoData.observe(this@ImageListFragment, Observer { e ->
+            refreshingWithNoData.observe(viewLifecycleOwner, { e ->
                 e?.consume {
                     contentProgressBar.setVisible(it)
                 }
             })
 
-            showError.observe(this@ImageListFragment, Observer { e ->
+            showError.observe(viewLifecycleOwner, { e ->
                 e?.consume {
                     updateNoItemVisibility(it)
                 }
             })
 
-            showLoadingMoreError.observe(this@ImageListFragment, Observer { e ->
+            showLoadingMoreError.observe(viewLifecycleOwner, { e ->
                 e?.consume {
                     updateNoItemVisibility(false)
                     adapter?.indicateLoadMoreError()
@@ -140,14 +140,14 @@ class ImageListFragment : Fragment() {
         }
 
         sharedViewModel.apply {
-            onRequestRefresh.observe(this@ImageListFragment, Observer { e ->
+            onRequestRefresh.observe(viewLifecycleOwner, { e ->
                 e?.consume {
                     if (it == type) {
                         viewModel.refresh()
                     }
                 }
             })
-            onRequestScrollToTop.observe(this@ImageListFragment, Observer { e ->
+            onRequestScrollToTop.observe(viewLifecycleOwner, { e ->
                 e?.consume {
                     if (it == type) {
                         scrollToTop()

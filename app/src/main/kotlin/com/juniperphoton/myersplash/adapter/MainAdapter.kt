@@ -40,7 +40,7 @@ class MainAdapter(fm: FragmentManager
 
     override fun getCount(): Int = titlesMap.size
 
-    override fun getPageTitle(position: Int): CharSequence? {
+    override fun getPageTitle(position: Int): CharSequence {
         return App.instance.getString(titlesMap[position]!!)
     }
 }

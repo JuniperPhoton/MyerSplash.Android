@@ -111,8 +111,8 @@ class DownloadsListActivity : BaseActivity(), DownloadsListAdapter.Callback, Cor
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        recyclerView.savePosition(outState)
         super.onSaveInstanceState(outState)
+        recyclerView.savePosition(outState)
     }
 
     private fun onClickMore() {

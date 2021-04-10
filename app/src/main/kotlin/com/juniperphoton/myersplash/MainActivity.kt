@@ -61,7 +61,7 @@ class MainActivity : BaseActivity() {
 
         sharedViewModel =
             AppViewModelProviders.of(this).get(ImageSharedViewModel::class.java).apply {
-                onClickedImage.observe(this@MainActivity, Observer { data ->
+                onClickedImage.observe(this@MainActivity, { data ->
                     data?.consume {
                         Pasteur.info(TAG) {
                             "onClickedImage $data"
@@ -103,11 +103,11 @@ class MainActivity : BaseActivity() {
 
 
     override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
         val index = viewPager.currentItem
         if (index in 0..2) {
             outState.putInt(SAVED_NAVIGATION_INDEX, viewPager.currentItem)
         }
-        super.onSaveInstanceState(outState)
     }
 
     override fun onResume() {
