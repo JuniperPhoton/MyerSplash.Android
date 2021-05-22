@@ -4,6 +4,8 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.RenderEffect
+import android.graphics.Shader
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
@@ -94,6 +96,20 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    @SuppressLint("NewApi")
+    private fun blurContent() {
+        findViewById<View>(R.id.coordinator_layout).apply {
+            setRenderEffect(RenderEffect.createBlurEffect(20f, 20f, Shader.TileMode.REPEAT))
+        }
+    }
+
+    @SuppressLint("NewApi")
+    private fun unBlurContent() {
+        findViewById<View>(R.id.coordinator_layout).apply {
+            setRenderEffect(null)
+        }
+    }
+
     private fun startServiceToCheck() {
         val intent = Intent(this, DownloadService::class.java).apply {
             putExtra(Params.CHECK_STATUS, true)
@@ -169,12 +185,14 @@ class MainActivity : BaseActivity() {
         imageDetailView.apply {
             onShowing = {
                 searchFab.hide()
+                blurContent()
             }
             onHidden = {
                 searchFab.show()
                 if (toolbarLayout.height - abs(toolbarLayout.top) < 0.01) {
                     tagView.animate().alpha(1f).setDuration(300).start()
                 }
+                unBlurContent()
             }
         }
 

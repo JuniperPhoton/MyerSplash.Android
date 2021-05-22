@@ -20,6 +20,7 @@
             android:name=".MainActivity"
             android:label="${APP_NAME}"
             android:launchMode="singleTask"
+            android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -30,16 +31,19 @@
         <activity
             android:name=".activity.SettingsActivity"
             android:label="SETTINGS"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
         <activity
             android:name=".activity.AboutActivity"
             android:label="ABOUT"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/AboutTheme"/>
         <activity
             android:name=".activity.DownloadsListActivity"
             android:label="DOWNLOADS"
+            android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
@@ -48,6 +52,7 @@
         <activity
             android:name=".activity.EditActivity"
             android:label="Edit wallpaper"
+            android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
@@ -73,7 +78,7 @@
                 android:resource="@xml/paths"/>
         </provider>
 
-        <receiver android:name=".broadcastreceiver.WallpaperWidgetProvider">
+        <receiver android:name=".broadcastreceiver.WallpaperWidgetProvider" android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
